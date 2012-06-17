@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+/*  */
+*{}
+h6{text-align:center;margin:2px;text-align:left; color:white;background-color:#800050; font-size:120%;border:0px dashed #D76703;}
+h7{color:#800050;font-weight:bold;}
+td{width:20px; border :1px dashed red;}
+ul{background-color:white;}
+li{color:darkblue;margin:5px 5px 5px 0px;background-color:#F2ffff;}
+
+.connexion{float:left; width:300px; height:40px; margin:1px; padding:1px; text-align:right;font-size:12px;  background-color:aqua; border:1px dashed black; }
+#login{width:70px; size:10px; margin:1px; }
+#clef{width:40px; size:10px; margin:1px; }
+#connect{margin:1px;}
+
+.selectionLieu{float:left; width:300px; height:41px; margin:1px; padding:1px; text-align:center;font-size:12px; background-color:orange; border:1px dashed black; }
+.selectionLieu input{width:130px; size:10px;text-align:left;}
+
+.tableau1{clear:left; float:left; width:300px; height:200px; margin:1px; padding:1px; background-color:silver; border :2px dashed aqua;}
+.tableau2{float:left; width:300px; height:180px; margin:1px; padding:1px; background-color:yellow; border :2px dashed green;}

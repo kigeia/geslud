@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+/*  */
+*{}
+h6{text-align:center;margin:2px;text-align:left; color:white;background-color:#800050; font-size:120%;border:0px dashed #D76703;}
+h7{color:#800050;font-weight:bold;}
+table{border-collapse:collapse;margin:0;padding:0;border:0px dashed blue;}
+tr{margin:0;padding:0;border:0px dashed blue;} /* pb margin */
+td{margin:0; padding:0;border :0px dashed black;}
+ul{background-color:white;}
+li{color:darkblue;margin:5px 5px 5px 0px;background-color:#F2ffff;}
+
+.colonnegauche{float:left;margin:0px;padding:1px 0;width:300px;background-color:white;border-right:1px solid gray; }
+.colonnedroite{float:left;margin:0px;padding:1px 0;width:300px;background-color:white;border:0px solid gray; }
+
+/* blocs de selection au-dessus du tableau*/
+.audessusentetetableau{margin:2px 0;padding:1px;width:290px;height:70px;background-color:white;font-size:13px;border:0px dashed gray; }
+
+.alignementhaut{vertical-align:top;}
+
+/* definition de la 1e ligne d'entete du tableau*/
+.entetetableau{width:300px;height:40px;margin:0;padding:1px 0;background-color:white;font-size:11px;border:0px dashed blue;}
+.entete10{text-align:center;background-color:lightgray;border:1px solid gray;}
+.th{border:1px solid gray;}
+.cellule10{border-bottom:1px solid lightgray;}
+.selection10{width:25px;float:left;border:1px solid gray;}
+.libelle10{width:130px;float:left;border:1px solid gray;}
+.place10{width:65px;float:left;border:1px solid gray;}
+.histo10{width:30px;float:left;border:1px solid gray;}
+
+.libelle11{width:130px;float:left;border:1px solid gray;}
+.datemvt10{width:60px;float:left;border:1px solid gray;}
+.heuremvt10{width:28px;float:left;border:1px solid gray;}
+.auteurmvt10{width:38px;float:left;border:1px solid gray;}
+
+/* definition du corps du tableau*/
+.corpstableau{width:295px;height:200px;overflow:auto;float:left;margin:1px 2px;padding: 1px 0;border:0px dashed red; }
+/*.corpstableau{width:295px;height:200px;overflow:auto;float:left;margin:1px 2px;padding: 1px 0;border:0px dashed red; }	*/
+
+.cellule20{height:27px;font-size:11px;margin:0px 0;padding:1px 0;border:1px solid lightgray;} /* pb border */
+.numcarton20{width:35px;float:left;clear:left;}
+.selection20{width:25px;float:left;}
+.libelle20{width:130px;float:left;}
+.place20{width:65px;float:left;}
+.histo20{width:12px;float:left;}
+
+.libelle21{width:130px;float:left;border:1px solid lightgray;}
+.datemvt20{width:60px;float:left;border:1px solid lightgray;}
+.heuremvt20{width:28px;float:left;border:1px solid lightgray;}
+.auteurmvt20{width:38px;float:left;border:1px solid lightgray;}

@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+/*  */
+*{}
+body{margin:0px;padding:0px;background-color:FFF;font-size:10px;font-family:arial,verdana;height:90%;overflow:hidden;}	/*overflow : desactivation asceusseurs*/
+p{margin:0px;padding:0px;color:black;}	/* marge gauche paragraphe */
+ol{margin-left:25%}										/* début de liste */
+em{vertical-align:super; background-color:rgb(100%,50%,00%); font-size:50%}	/* remarque */
+h1{}
+h3{margin:10px 0px 0px 0px;padding:0px;}
+table{width:100%;vertical-align:top;}
+td{vertical-align:top;}
+tr{vertical-align:top;}
+
+ul{margin:0px;padding:0px 0px 0px 20px;background-color:white;}
+li{color:darkblue;margin:5px 5px 5px 0px;background-color:#F2ffff;}
+
+
+body input{font-size:11px}
+body select{font-size:11px}
+
+.hautPage{position:fixed;left:0%;top:0%;width:100%; height:100px ;background-color:#A7BAD0; margin:0px; padding:5px; border:0px dashed black;}
+
+.zoneLogoHautGauche{position:fixed;top:0%;left:0%;width:70px;height:100px ;margin:0px; padding:5px; background-color:#A7BAD0; border:0px dashed black;}
+.zoneLogoHautGauche p{background-color:#A7BAD0;text-align:center;}
+
+.zoneBanniere{position:fixed;left:85px;width:83%; max-width:820px; margin:0px; padding:0px 0px 2px 0px;border:0px dashed black;}
+.zoneTitreDoc{position:fixed;left:85px;top:0px;width:83%; max-width:511px;margin: 0px; padding:0px;background-color:tranparent;}
+.zoneTitreDoc h1{text-align:center;font-size:25px;color:white;}
+
+.zoneMenuHaut{overflow:auto;font-size:12px;line-height:1.8em;position:fixed;left:100px; max-width:870px; top:0%;height:auto;margin:55px 3% 0px 0px; padding:5px; background:#EAF2F8; border :0px dashed black}
+.texteZoneMenuHaut{color:blue; border: 0px dashed #A7BAD0; height:50px;  padding:3px;margin:0px 5px;text-align:center;}
+
+.zoneMenuHaut a:link{font-size:12px;font-style:normal;font-weight:bold;text-decoration:none;}
+.zoneMenuHaut a:visited{font-size:12px;color:darkblue;font-style:normal;font-weight:bold;text-decoration:none;}
+.zoneMenuHaut a:hover{font-size:15px;color:darkblue;font-style:normal;font-weight:bold;text-decoration:none;}
+.zoneMenuHaut a:focus{font-size:12px;color:darkblue;font-style:normal;font-weight:bold;text-decoration:none;}
+
+.menuActuel a:link{font-size:15px;color:#9b097e;font-style:normal;font-weight:bold;text-decoration:none;}
+.menuActuel a:visited{font-size:15px;color:#9b097e;font-style:normal;font-weight:bold;text-decoration:none;}
+.menuActuel a:hover{font-size:15px;color:#9b097e;font-style:normal;font-weight:bold;text-decoration:none;}
+.menuActuel a:focus{font-size:15px;color:#9b097e;font-style:normal;font-weight:bold;text-decoration:none;}
+
+.zoneLogin{font-size:12px;position:fixed;left:110px; max-width:870px; top:30px;height:auto;margin:55px 3% 0px 0px; padding:5px; border :0px dashed black;}
+
+.zoneMenuGaucheSous{margin:2px 2px 10px 2px; padding:2px; width:20%; height:auto; background-color:orange; border:0px dashed black;}
+.zoneMenuGaucheSous h4{margin:2px;font-size:120%;color:maroon;text-align:left}
+.zoneMenuGaucheSous li{color:black;margin:0px;text-align:left ; background-color:orange;}
+
+.titre{float:left;width:650px; height:50px; margin:1px; padding:1px;}
+h5{margin:120px 5px;text-align:center; color:#58A;font-size:20px; max-width:900px; border:0px dashed #A7BAD0;}
+.titrelien {font-size:15px;text-decoration:none;background-color:lightgray;}
+.vert{font-size:20px;color:green;background-color:lightgray;}
+.marron{font-size:20px;color:maroon;background-color:lightgray;}
+.orange{font-size:20px;color:orange;background-color:gray;}
+
+
+.zoneCorpsDoc{position:fixed;left:5px;overflow:auto;margin:150px 0px 0px 0px;padding:2px; width:75%; height:60%;min-width:305px; max-width:885px;background-color:white; border:3px solid #58A;font-size:12px;}
+h6{margin:2px;text-align:left; color:black;font-size:120%;border:0px dashed #A7BAD0;}
+
+.zoneCorpsDoc ul{border:0px dashed #A7BAD0;}
+.liens p{margin-left:50px;}
+.imageDroite{float:right;}
+
+.paragraphe{clear:right;float:right; width:17%; min-width:150px; max-width:200px; margin:10px 1% 1px 1%; padding:1px; background-color:white; font-size:12px;  border:1px dashed black; }
+.notice{clear:right;float:right; width:17%; min-width:150px; max-width:200px; margin:100px 1% 1px 1%; padding:1px; background-color:white; font-size:12px;  border:1px dashed black; }
+
+.zoneBasPageSous{position:fixed;bottom:0%;left:0%;margin:0px; width:100%; max-width:1000px; height:0.5em; padding:10px; background-color:#A7BAD0;border:0px dashed black;}
+
+.droite{float:right;margin:10px 0px 0px 0px;padding-right:0px;}
+.gauche{float:left;margin:10px 0px 0px 0px;padding-right:0px;}

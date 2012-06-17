@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+/*  */
+*{}
+input{font-size:12px;}
+textarea{font-size:12px;}
+select{font-size:12px;}
+table{width:400px}
+td{text-align:center}
+
+.zoneCorpsDoc h6{margin:3px;text-align:left; color:black;font-size:16px;border:0px dashed #D76703;}
+.zoneCorpsDoc ul{border:1px dashed #D76703;}
+
+.nomArticle{float:left;padding:2px; margin:3px; line-height:3em; border:0px dashed #D76703;width:auto;}
+.nomArticle strong{color:black; font-size:16px; font-weight:bold;}
+.nomArticle input{color:black; font-size:14px; font-weight:bold;}
+
+.descriptifLong{float:left;padding:2px; margin:3px ;border:0px dashed #D76703;width:auto;}
+.descriptifLong input{font-size:12px;}
+
+.edition{float:left; padding:2px; margin:3px; line-height:3em; border:0px dashed green;width:560px;}
+.edition input{font-size:12px;}
+
+.conseil{float:left;padding:2px; margin:3px; line-height:3em; border:0px dashed #D76703;width:300px;}
+.conseil input{font-size:12px;}
+
+.sous{float:left;padding:1px; margin:2px; line-height:2em; border:0px dashed #D76703;width:auto;}
+.sous input{text-align:center;font-size:12px;}
+
+.imageJeu{float:left;padding:2px; margin:3px; border:0px dashed #D76703;width:240px;}
+.imageJeu input {margin:auto; padding:5px;font-size:12px;}
+
+.enregistrer{float:right;padding:2px 2px 2px 2px; text-align:right;margin:0px 30px 90px 0px; border:0px dashed #D76703;width:500px;}
+.enregistrer input{font-size:12px;}
+
+.tableau1{width:200px;vertical-align: baseline}

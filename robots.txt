@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /ludoAutre/
+Disallow: /ludoCss/
+Disallow: /ludoHtml/
+Disallow: /ludoImages/
+Disallow: /ludoJS/
+Disallow: /ludoTelechargement/
+
+

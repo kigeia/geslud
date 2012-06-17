@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+/*  */
+*{}
+body{width:100%;margin:0px;padding:0px;background-color:yellow;font-family:arial}
+p{margin:0px;padding:0px;color:maroon; font-size:100%}	/* marge gauche paragraphe */
+ol{margin-left:25%}										/* début de liste */
+em{vertical-align:super; background-color:rgb(100%,50%,00%); font-size:50%}	/* remarque */
+h1{}
+h2{margin:10px 0px 0px 0px;padding:0px;}
+/* a{color:#9b097e decoration:none} 
+a:hover{color:rouge text-decoration:bold; text-decoration:underline;}
+*/
+table{border: medium solide maroon; width:100%;}
+td,th{border:thin, solid #D76703;}
+ul{margin:0px;padding:0px 0px 0px 20px;}
+
+.surlignerose{margin:0% 0% 10px 20%; background-color:#FFBBBB}
+
+.zoneLogoHautGauche{position:fixed;top:0%;left:0%;width:20%;height:170px ;margin:20px 2px 2px 10px; padding:2px; background-color:#D76703; border:0px dashed black;}
+.zoneLogoHautGauche p{background-color:#D76703;text-align:center;}
+
+.hautPage{position:fixed;left:0%;top:0%;width:100%; height:170px ;background-color:#D76703; margin:0px; padding:5px; border:0px dashed black;}
+
+.zoneBanniere{position:fixed;left:30%;width:65%;margin:0px 0px; padding:0px 0px 2px 0px; text-align:center; border:0px dashed black;}
+
+.zoneTitreDoc{position:fixed;left:30%;top:0px;width:65%;margin: 0px 0px 0px 0px; padding:0px;background-color:tranparent;}
+.zoneTitreDoc h1{text-align:center;font-size:200%;color:maroon;}
+
+.zoneMenuHaut{font-size:100%;line-height:2.5em;position:fixed;left:26%;top:0%;height:190px;margin:71px 3% 0px 0px; padding:0px; background:#D76703; border :0px dashed black}
+.zoneMenuHaut span{color:maroon; border: medium double #D76703; height:100px; width:100%; padding:3px;margin:0px;text-align:center;background:orange;}
+
+.zoneMenuGauche{overflow:auto;position:fixed;width:100%; margin:135px 80% 5px -10px; height:100% ;padding:2px 80% 10px 10px;  background-color:#D76703; color:orange; border:0px dashed black;}
+.zoneMenuGauche h2{text-align:center;width:20%;margin:10px 0px 5px 0px;}
+
+.zoneMenuGaucheSous{margin:2px 2px 10px 2px; padding:5px; width:20%; height:auto; background-color:orange; border:0px dashed black;}
+.zoneMenuGaucheSous h3{color:maroon;text-align:left}
+.zoneMenuGaucheSous li{color:black;margin:0px;text-align:left ; background-color:orange;}
+
+.zoneCorpsDoc{position:fixed;left:0%;margin:155px 0px 0px 25%;padding:10px; width:71%;height:75%;background-color:orange; border:0px dashed black;}
+.zoneCorpsDoc h5{text-align:center; color:maroon;font-size:150%;}
+p.liens{margin-left:50px;}
+.imageDroite{float:right;}
+.criteres{padding:10px; margin:10px ;border:dashed #D76703}
+
+.zoneBasPage{position:fixed;bottom:0%;margin:0px 0px 0px 0px; width:100%; height:auto; padding:10px; background-color:#D76703; border:0px dashed black;}
+.zoneBasPage p{background-color:orange}
+.droite{float:right;margin:15px 0px 0px 0px;padding-right:25px;}
+.gauche{float:left;}
+
+.zoneBasPage{font-size:80%}
+
+/* a.debutdusite:link {color: #009900;}		/* pseudo-class de style
+a.debutdusite:visited {color: #FF0000;}
+a.debutdusite:hover {color: #333333;}
+a.debutdusite:focus {color: #333333;}
+a.debutdusite:active {color: #009900;}
+
+#centredusite a:link {color: #009900;}
+#centredusite a:visited {color: #00FF00;}
+#centredusite a:hover {color: #333333;}
+#centredusite a:focus {color: #333333;}
+#centredusite a:active {color: #009900;}		/* déclaration d'un ID */
+
+
