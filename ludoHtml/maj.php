@@ -1,10 +1,11 @@
 <?php		//	utilise	include	include/connexion1.php
+			//					include/fonctions.inc.php : fsecure()
 			//					include/htmlhead.inc.php : headhtml()
 			//					include/menu.inc.php
 			//			CSS		css/maj.css
-			//		->	SESSION	connexion, usr_droit4, logingeslud
+			//		->	SESSION	connexion, usr_droit4, logingeslud, utilisateur_ID
 			//		<-	SESSION	page, 
-			//			POST	envoi,verif,reset, Design,DesignVO,BGGID,Descript,art_LIB1,BaseEx,An,Editeur,
+			//			POST	envoi,verif,reset, design,designvo,bggid,descript,art_LIB1,baseext,an,editeur,
 			//			POST(suite) conseil,theme,type,min,max,duree,agemin,regles,reglesPJ,monfichier,
 			//			BDD		te_article_art,te_exemplaire2_exp,tx_jeuconseil_csl,tx_jeutype_jtp,
 			//			BDD(suite) tx_jeutheme_thm,tx_joueuragemin_gmi,tx_jeuduree_dur
@@ -68,93 +69,103 @@
 	<div class="zoneCorpsDoc">
 <?php
 					if(isset($_POST['reset']))
-					{	$Design = '';
-						$DesignVO = '';
-						$BGGID = '';
-						$Descript = '';
-						$BaseEx = '';
-						$An = '';
-						$Editeur = '';
+					{	$design = '';
+						$designvo = '';
+						$bggid = '';
+						$descript = '';
+						$baseext = '';
+						$an = '';
+						$editeur = '';
 						$conseil = '';
 						$theme = '';
-						$type = '';
+						$jeutype = '';
+						$public='';
 						$min = '';
 						$max = '';
 						$duree = '';
 						$agemin = '';
 						$regles = '';
-						$reglesPJ = '';
+						$numregles = '';
 						$monfichier = '';
 						// $art=$_POST['art'];  présent uniquement dans fichier modif article
 					}
 					else if(isset($_POST['envoi']))
-					{	$Design = fsecure($_POST['Design']);
-						$DesignVO = fsecure($_POST['DesignVO']);
-						$BGGID = (int) fsecure($_POST['BGGID']);
-						$Descript = fsecure($_POST['Descript']);
-						$BaseEx = $_POST['BaseEx'];
-						$An = (int) fsecure($_POST['An']);
-						$Editeur = fsecure($_POST['Editeur']);
+					{	$design = fsecure($_POST['design']);
+						$designvo = fsecure($_POST['designvo']);
+						$bggid = (int) fsecure($_POST['bggid']);
+						$descript = fsecure($_POST['descript']);
+						$baseext = $_POST['baseext'];
+						$an = (int) fsecure($_POST['an']);
+						$editeur = fsecure($_POST['editeur']);
 						$conseil = $_POST['conseil'];
 						$theme = $_POST['theme'];
-						$type = $_POST['type'];
+						$jeutype = $_POST['jeutype'];
+						$public = (int) $_POST['public'];
+	//					$public = $_POST['public'];
 						$min = (int) fsecure($_POST['min']);
 						$max = (int) fsecure($_POST['max']);
 						$duree = $_POST['duree'];
 						$agemin = $_POST['agemin'];
 						$regles = fsecure($_POST['regles']);
-						$reglesPJ = fsecure($_POST['reglesPJ']);
+						$numregles = fsecure($_POST['numregles']);
 						$monfichier = $_POST['monfichier'];
-						$jo=date("d");
-						$mo=date("m");
-						$an=date("Y");
-						$date=''.$jo.'/'.$mo.'/'.$an.'';
-						$he=date("H");
-						$min=date("i");
-						$heure=''.$he.'h'.$min.'';
+						$art_crea_DAA = date("Y-m-d-H:i:s");
 
-						$req01="INSERT INTO te_article_art VALUES('','$Design','','$Descript','1','art','','$BaseEx','','','','','','','','$BGGID','$DesignVO','$monfichier','$An','$Editeur','$min','$regles','$reglesPJ','jeu','',CURRENT_TIMESTAMP,'$heure','$utilisateur_ID','','','','','','')";
-						mysql_query($req01);
-						$req04="SELECT art_ID FROM te_article_art WHERE art_LIB='$Design'";
+							$req01="INSERT INTO te_article_art (art_LIB,art_TXT,art_MOD,art_TRI,ext_ID,pbl_ID,jmx_ID,thm_ID,jtp_ID,csl_ID,gmi_ID,dur_ID,art_bgg_ID,art_designationVO,art_image_IMG,art_editionannee,art_editeur,art_nbjoueurmin,art_regles,art_reglenum,art_materieltype,art_crea_DAA,art_crea_UAA)"
+									."VALUES('$design','$descript','1','art','$baseext','$public','$max','$theme','$jeutype','$conseil','$agemin','$duree','$bggid','$designvo','$monfichier','$an','$editeur','$min','$regles','$numregles','jeu',CURRENT_TIMESTAMP(14),'$utilisateur_ID')";
+	//								."VALUES('','$design','','$descript','1','art','','$BaseEx','','','','','','','','$bggid','$designvo','$monfichier','$an','$editeur','$min','$regles','$reglesPJ','jeu','',CURRENT_TIMESTAMP,'$heure','$utilisateur_ID','','','','','','')";
+							$res01=mysql_query($req01); // creation d'un nouvel article
+						$req04="SELECT art_ID FROM te_article_art WHERE art_LIB='$design'";
 						$calq=mysql_query($req04);
 						while(list($art_ID)=mysql_fetch_array($calq))
-						{	$Design0=$Design.'_E1';
-/**/							mysql_query("INSERT INTO te_exemplaire2_exp VALUES('','$Design','1','$Design0','','','1','exp','$art_ID','0','','','',CURRENT_TIMESTAMP,'$utilisateur_ID','','')");
-						}
-					}
+						{	$Design0=$design.'_E1';
+							$exp_crea_DAA = date("Y-m-d-H:i:s");
+							$annee = date("Y");
+							$req13="INSERT INTO te_exemplaire2_exp (exp_LIB,exp_num,exp_LIB1,exp_MOD,exp_TRI,art_ID,exp_annee,exp_crea_DAA,exp_crea_UAA)"
+									."VALUES('$design','1','$Design0','1','exp','$art_ID','$annee','$exp_crea_DAA','$utilisateur_ID')";
+	//								."VALUES('','$design','1','$Design0','','','1','exp','$art_ID','0','','','',CURRENT_TIMESTAMP,'$utilisateur_ID','','')");
+							$res13=mysql_query($req13);
+						} // fin while
+					} // fin else if(isset($_POST['envoi']))
 					else
-					{	if (isset($_POST['Design']))
-						{	$Design = fsecure($_POST['Design']);
-							if  (isset($_POST['BaseEx']))
-							{	$DesignVO = fsecure($_POST['DesignVO']);
-								$BGGID = (int) fsecure($_POST['BGGID']);
-								$Descript = fsecure($_POST['Descript']);
-								$BaseEx = $_POST['BaseEx'];
-								$An = (int) fsecure($_POST['An']);
-								$Editeur = fsecure($_POST['Editeur']);
+					{	if (isset($_POST['design']))
+						{	$design = fsecure($_POST['design']);
+							if  (isset($_POST['baseext']))
+							{	$designvo = fsecure($_POST['designvo']);
+								$bggid = (int) fsecure($_POST['bggid']);
+								$descript = fsecure($_POST['descript']);
+								$baseext = $_POST['baseext'];
+								$an = (int) fsecure($_POST['an']);
+								$editeur = fsecure($_POST['editeur']);
 								$conseil = $_POST['conseil'];
 								$theme = $_POST['theme'];
-								$type = $_POST['type'];
+								$jeutype = $_POST['jeutype'];
+								$public = fsecure($_POST['public']);
 								$min = (int) fsecure($_POST['min']);
 								$max = (int) fsecure($_POST['max']);
 								$duree = $_POST['duree'];
 								$agemin = $_POST['agemin'];
 								$regles = fsecure($_POST['regles']);
-								$reglesPJ = fsecure($_POST['reglesPJ']);	
+								$numregles = fsecure($_POST['numregles']);	
 								if  (isset($_POST['monfichier'])) $monfichier = $_POST['monfichier'];
 								$log_UAA=$_SESSION['logingeslud'];
 							}
 						}
 					}
 // 	------------------------DEBUT DU CORPS DE LA PAGE-----------------------------------------------------------	-->	
-				if(isset($_POST['envoi']))
-				{	echo 'L\'article <b>'.$Design.'</b> a été créé.<br/>
-					L\'exemplaire <b>'.$Design0.'</b> a été créé.';
-				}
-					if (isset ($_POST['Design']))
-					{	$Design=fsecure($_POST['Design']);}
+				if(isset($_POST['envoi'])) // réception formulaire validé
+				{	if($res01)	// requete de mise à jour OK
+					{	echo $art_crea_DAA;
+						echo 'L\'article <b>'.$design.'</b> a été créé.<br/>';
+						echo "L\'exemplaire <b>".$Design0.'</b> a été créé.';
+					}
 					else
-					{	$Design='';}
+					{	echo $res01."Echec lors de la création de l'article";	}
+				}
+					if (isset ($_POST['design']))
+					{	$design=fsecure($_POST['design']);}
+					else
+					{	$design='';}
 ?>
 <!----------DEBUT BLOC NOMARTICLE--	-->
 			<table>
@@ -163,144 +174,178 @@
 <?php												if(!isset($_POST['envoi']))
 													{
 ?>						<form action="maj.php" method="post" enctype="multipart/form-data"  >
-								<strong>Désignation</strong> <input name="Design" id="Design" type="text" value="<?php echo $Design;?>" size="40" maxlength="60"/>
+								<strong>Désignation</strong> <input name="design" id="design" type="text" value="<?php echo $design;?>" size="40" maxlength="60"/>
 								<input type="submit" value="Existe-il ?"/>
 						</form>
 <?php												}
-								if (isset ($_POST['DesignVO']))	// ajout suite à pb declaration variable esign_VO
-								{$DesignVO=fsecure($_POST['DesignVO']);	}
+								if (isset ($_POST['designvo']))	// ajout suite à pb declaration variable esign_VO
+								{$designvo=fsecure($_POST['designvo']);	}
 								else
-								{	$DesignVO='';
-									$BGGID='';
-									$Descript='';
-									$BaseEx='';
-									$An='';
-									$Editeur='';
+								{	$designvo='';
+									$bggid='';
+									$descript='';
+									$baseext='';
+									$an='';
+									$editeur='';
 									$conseil='';
-									$type='';
+									$jeutype='';
+									$public='';
 									$theme='';
 									$agemin='';
 									$duree='';
 									$min='';
 									$max='';
 									$regles='';
-									$reglesPJ='';
+									$numregles='';
 								}
-								$Des=trim($Design); // suppression des espaces avant et après
+								$Des=trim($design); // suppression des espaces avant et après
 								if($Des!='' AND !isset($_POST['monFichier']))
-								{	$result=mysql_query("SELECT * FROM te_article_art WHERE art_LIB LIKE '%$Design%'") or die(mysql_error()); 
+								{	$result=mysql_query("SELECT * FROM te_article_art WHERE art_LIB LIKE '%$design%'") or die(mysql_error()); 
 									if(mysql_numrows($result)==0) //Récupère le nombre de lignes d'un jeu de résultat
-									{	echo "Aucun article ne correspond à la recherche <b>".$Design."</b><br/><br/>";
+									{	echo "Aucun article ne correspond à la recherche <b>".$design."</b><br/><br/>";
 ?>
 		<fieldset>
 			<form action="maj.php" method="post" enctype="multipart/form-data"  >
-				<input name="Design" type="hidden" id="Design" value="<?php echo $Design;?>"/>
-				<strong>Désignation VO</strong> <input name="DesignVO" type="text" value="<?php echo $DesignVO;?>"size="24" maxlength="20"/>
-				<strong>BGG ID</strong> <input type="text" name="BGGID" value="<?php echo $BGGID;?>"size="6" maxlength="6"/><br/>
+				<input name="design" type="hidden" id="design" value="<?php echo $design;?>"/>
+				<strong>Désignation VO</strong> <input type="text" name="designvo" value="<?php echo $designvo;?>"size="24" maxlength="20"/>
+				<strong>BGG ID</strong> <input type="text" name="bggid" value="<?php echo $bggid;?>"size="6" maxlength="6"/><br/>
 					<!--	----------------------------FIN BLOC NOM ARTICLE--	-->
 <!--	---------DEBUT BLOC DESCRIPTIFLONG----------------------------------------------------------------------------->
-				<strong>Descriptif détaillé</strong></br><textarea name="Descript" value="<?php echo $Descript;?>" cols="50" rows="4"><?php echo $Descript;?></textarea><br/>
+				<strong>Descriptif détaillé</strong></br><textarea name="descript" value="<?php echo $descript;?>" cols="50" rows="4"><?php echo $descript;?></textarea><br/>
 
 <!----------DEBUT BLOC BASE OU EXTENSION----------------------------------------------------------------------------------->
 				<strong>Base ou Extension</strong> 
-				<select name="BaseEx">				
-<?php											$sql = mysql_query("SELECT * FROM tx_jeuextbase_ext ORDER BY ext_RG ASC");
-												while(list($ext_ID,$ext_LIB)=mysql_fetch_array($sql))
-												{	if(isset($_POST['BaseEx']) AND $ext_ID==$_POST['BaseEx'])
+				<select name="baseext"  id="baseext">				
+<?php											$req08="SELECT * FROM tx_jeuextbase_ext ORDER BY ext_RG ASC";
+												$demand_ext = mysql_query($req08);
+												while(list($ext_ID,$ext_LIB)=mysql_fetch_array($demand_ext))
+												{	if(isset($_POST['baseext']) AND $ext_ID==$_POST['baseext'])
 													{
-	echo'			<option value="'.$_POST['BaseEx'].'" selected="selected">'.$ext_LIB.'</option>';
+	echo'			<option value="'.$_POST['baseext'].'" selected="selected">'.$ext_LIB.'</option>';
 													}
 													else
 													{
 	echo"			<option value='".$ext_ID."'>".$ext_LIB.'</option>';
 													}
-												}
+												} // fin while
 	echo		'</select>';
 ?>
-		<br/><strong>Année de la 1e édition</strong> <input name="An" type="text" id="An" value="<?php echo $An;?>" size="5" maxlength="4" />
-		<strong>Editeur</strong> <input name="Editeur" type="text" id="Editeur" value="<?php echo $Editeur;?>"size="15" maxlength="30" /><br/>
+<!---------DEBUT BLOC Edition---------------------------------------------------------------------------------------------->
+		<br/><strong>Année de la 1e édition</strong> <input name="an" type="text" id="an" value="<?php echo $an;?>" size="4" maxlength="4" />
+		<strong>Editeur</strong> <input name="editeur" type="text" id="editeur" value="<?php echo $editeur;?>"size="15" maxlength="30" /><br/>
 
 <!----------DEBUT BLOC CONSEIL--------------------------------------------------------------------------------------------->
 		<strong>Conseil</strong> 
 				<select name='conseil'>				
-<?php											$sql = mysql_query("SELECT * FROM tx_jeuconseil_csl ORDER BY csl_RG ASC");
-												while(list($csl_ID,$csl_LIB)=mysql_fetch_array($sql))
-												{	if($csl_LIB==$csl_LIB1)
+<?php											$req08="SELECT * FROM tx_jeuconseil_csl ORDER BY csl_RG ASC";
+												$res08 = mysql_query($req08);
+												while(list($csl_ID,$csl_LIB)=mysql_fetch_array($res08))
+												{	if($csl_ID==$conseil)
 													{
-	echo'			<option value="'.$csl_LIB.'" selected="selected">'.$csl_LIB.'</option>';
+	echo'			<option value="'.$csl_ID.'" selected="selected">'.$csl_LIB.'</option>';
 													}
-	echo'			<option value="'.$csl_LIB.'">'.$csl_LIB.'</option>';
-												}
-	echo		'</select>';
-// <!--------------SELECTION DU TYPE DE JEU ------------------------------------------------------------------------------------->
-	echo 		'<strong>Type de Jeu</strong> 
-				<select name="type">';
-												$sql = mysql_query("SELECT * FROM tx_jeutype_jtp ORDER BY jtp_ID ASC");
-												while(list($jtp_ID,$jtp_LIB)=mysql_fetch_array($sql))
-												{	if($jtp_LIB==$jtp_LIB1)
+													else
 													{
-	echo			'<option value="'.$jtp_LIB.'" selected="selected">'.$jtp_LIB.'</option>';
+	echo'			<option value="'.$csl_ID.'">'.$csl_LIB.'</option>';
 													}
-	echo			'<option value="'.$jtp_LIB.'">'.$jtp_LIB.'</option>';
 												}
-?>			'</select>
-
+?>			</select>
 <!-------SELECTION DU Thème ---------------------------------------------------------------------------------------------------->
-				<br/><strong>Thème </strong>
+				<strong>Thème </strong>
 				<select name="theme">';
 <?php											$sql = mysql_query("SELECT * FROM tx_jeutheme_thm ORDER BY thm_ID DESC");
 												while(list($thm_ID,$thm_LIB)=mysql_fetch_array($sql))
-												{	if($thm_LIB==$thm_LIB1)
+												{	if($thm_ID==$theme)
 													{
-	echo			'<option value="'.$thm_LIB.'" selected="selected">'.$thm_LIB.'</option>';
+	echo			'<option value="'.$thm_ID.'" selected="selected">'.$thm_LIB.'</option>';
 													}
-													
-	echo			'<option value="'.$thm_LIB.'">'.$thm_LIB.'</option>';
+													else
+													{
+	echo			'<option value="'.$thm_ID.'">'.$thm_LIB.'</option>';
+													}
 												}
-?>				</select><br/>
+?>				</select>
+
+<!--------------SELECTION DU TYPE DE JEU ------------------------------------------------------------------------------------->
+			<br/><strong>Type de Jeu</strong> 
+				<select name="jeutype">
+<?php											$req05="SELECT * FROM tx_jeutype_jtp ORDER BY jtp_RG ASC";
+												$res05 = mysql_query($req05);
+												while(list($jtp_ID,$jtp_LIB)=mysql_fetch_array($res05))
+												{	if($jtp_ID==$jeutype)
+													{
+	echo			'<option value="'.$jtp_ID.'" selected="selected">'.$jtp_LIB.'</option>';
+													}
+													else
+													{
+	echo			'<option value="'.$jtp_ID.'">'.$jtp_LIB.'</option>';
+													}
+												}
+?>				'</select>
+
+<!--------------SELECTION DU TYPE DE PUBLIC ------------------------------------------------------------------------------------->
+			<strong>Public</strong> 
+				<select name="public">
+<?php											$req06="SELECT * FROM tx_public_pbl ORDER BY pbl_RG ASC";
+												$res06 = mysql_query($req06);
+							while(list($pbl_ID,$pbl_LIB)=mysql_fetch_array($res06))
+							{	if($pbl_ID==$public)
+								{
+	echo			'<option value="'.$pbl_ID.'" selected="selected">'.$pbl_LIB.'</option>';
+								}
+								else
+								{
+	echo			'<option value="'.$pbl_ID.'">'.$pbl_LIB.'</option>';
+								}
+							}
+?>				'</select>
 
 <!----DEBUT BLOC nb de joueurs--------------------------------------------------------------------------------------------------->
-				<strong>Nombre de joueurs mini</strong> <input name="min" type="text" id="min" value="<?php echo $min;?>" size="2" maxlength="2" />
+				<br/><strong>Nombre de joueurs mini</strong> <input name="min" type="text" id="min" value="<?php echo $min;?>" size="2" maxlength="2" />
 				<strong>Nombre maxi</strong> <input name="max" type="text" id="max" value="<?php echo $max;?>" size="4" maxlength="4" /> 
 
 <!--------------début BLOC Age mini---------------------------------------------------------------------------------------------->
-				<strong>Age_min</strong>
+				<br/><strong>Age_min</strong>
 				<select name="agemin">
 <?php												
-												$sql = mysql_query("SELECT gmi_ID,gmi_LIB FROM tx_joueuragemin_gmi ORDER BY gmi_LIB ASC");
-												
-												while(list($gmi_ID,$gmi_LIB)=mysql_fetch_array($sql))
-												{	if($gmi_LIB==$agemin)
+												$sql = mysql_query("SELECT gmi_ID,gmi_LIB,gmi_TXT FROM tx_joueuragemin_gmi ORDER BY gmi_RG ASC");
+												while(list($gmi_ID,$gmi_LIB,$gmi_TXT)=mysql_fetch_array($sql))
+												{	if($gmi_ID==$agemin)
 													{
-	echo			'<option value="'.$gmi_LIB.'" selected="selected" size="2">'.$gmi_LIB.'</option>';
+	echo			'<option value="'.$gmi_ID.'" selected="selected">'.$gmi_LIB.'</option>';
 													}
-													
-	echo			'<option value="'.$gmi_LIB.'">'.$gmi_LIB.'</option>';
+													else
+													{
+	echo			'<option value="'.$gmi_ID.'">'.$gmi_LIB.'</option>';
+													}
 												}
 ?>
 				</select><!--Fin de branchement base de donnée pour la valeur Age mini	-->
-<!--------------début de branchement base de donnée pour la valeur Durée	-->
-				<br/><strong>Durée (en min):</strong> 
+
+<!-------début BLOC Durée--------------------------------------------------------------------------------------------------------------------->
+				<strong>Durée (en min):</strong> 
 				<select name="duree">
-<?php											$sql = mysql_query("SELECT dur_ID,dur_LIB FROM tx_jeuduree_dur ORDER BY dur_LIB ASC");
+<?php											$sql = mysql_query("SELECT dur_ID,dur_LIB FROM tx_jeuduree_dur ORDER BY dur_RG ASC");
 												while(list($dur_ID,$dur_LIB)=mysql_fetch_array($sql))
-												{	if($dur_LIB==$duree)
+												{	if($dur_ID==$duree)
 													{
-	echo			'<option value="'.$dur_LIB.'" selected="selected">'.$dur_LIB.'</option>';
+	echo			'<option value="'.$dur_ID.'" selected="selected">'.$dur_LIB.'</option>';
 													}
-	echo			'<option value="'.$dur_LIB.'">'.$dur_LIB.'</option>';
+													else
+													{
+	echo			'<option value="'.$dur_ID.'">'.$dur_LIB.'</option>';
+													}
 												}
 	echo		"</select><br/>";	//Fin de branchement base de donn�e pour la valeur Dur�e	
 												if (isset ($_POST['regles']))	// ajout suite à pb declaration variable design_VO
 												{	$regles=fsecure($_POST['regles']);}
 												else
 												{	$regles='';
-													$_POST['regles']='';
-													$reglesPJ='';
+													$numregles='';
 												}
 ?>
 				<strong>Règles</strong> <input name="regles" type="text" id="art_RG" value="<?php echo $regles;?>" size="20" maxlength="20" />
-				<strong>N_regle (en_PJ)</strong> <input name="reglesPJ" type="text" id="regles_PJ" value="<?php echo $reglesPJ;?>" size="6" maxlength="6" /><br/><br/>
+				<strong>N_regle (en_PJ)</strong> <input name="numregles" type="text" id="numregles" value="<?php echo $numregles;?>" size="6" maxlength="6" /><br/><br/>
 				<!--	----------------------------------FIN BLOC CONSEIL--	-->
 											
 <!------------------DEBUT BLOC IMAGE------------------------------------------------------------------------------------>
@@ -314,8 +359,8 @@
 									else
 									{	while ($row = mysql_fetch_row($result))
 										{	if(!isset($_POST['envoi']))
-											{	echo"[".$Design."] existe dans la chaine de caractères de  ".$row[1].".</br>";
-												$ch1="$Design";
+											{	echo"[".$design."] existe dans la chaine de caractères de  ".$row[1].".</br>";
+												$ch1="$design";
 												$ch2="$row[1]";
 												$resultb = preg_match("/^.*$ch1.*$/", "/^.*$ch2.*$/"); // on teste si la valeur de result 0 ou 1 (correcte)
 												//echo " = ".$resultb." ";
@@ -324,7 +369,7 @@
 echo		 "---> <u>".$ch1. "</u> existe déjà.<br/>";?>
 
 			<form action="creation_Exemplaire.php" method="post" >
-				<input type="hidden" name="Design" value="<?php echo($Design);?>" />	
+				<input type="hidden" name="design" value="<?php echo($design);?>" />	
 				<input type="submit" value="Créer un exemplaire" />
 			</form> OU 
 			<form action="maj.php" method="post" >
@@ -339,7 +384,7 @@ echo		 "---> <u>".$ch1. "</u> existe déjà.<br/>";?>
 											else 
 											{
 ?>			<form action="creation_Exemplaire.php" method="post" >
-				<input type="hidden" name="Design" value="<?php echo($Design);?>" />	
+				<input type="hidden" name="design" value="<?php echo($design);?>" />	
 				<input type="submit" value="Créer un autre exemplaire" />
 			</form> OU 
 			<form action="maj.php" method="post" >
@@ -353,25 +398,44 @@ echo		 "---> <u>".$ch1. "</u> existe déjà.<br/>";?>
 
 <?php							if(isset($_POST['verif']))
 								{	echo '<td><br/><br/>';
-									echo"<b>Désignation :</b> ".$Design."</br>";
-									echo"<b>Désignation VO :</b> ".$DesignVO."</br>";
-									echo"<b>Description :</b> ".$Descript."<br/>";
-									echo"<b>BGG ID :</b> ".$BGGID."</br>";
-									echo"<b>Conseils :</b> ".$conseil."</br>";
-									echo"<b>Thème :</b> ".$theme."</br>";
-									echo"<b>Type :</b> ".$type."</br>";
-											$req02="SELECT ext_LIB FROM tx_jeuextbase_ext WHERE ext_ID='$BaseEx'";
+									echo"<b>Désignation :</b> ".$design."<br/>";
+									echo"<b>Désignation VO :</b> ".$designvo."<br/>";
+									echo"<b>BGG ID :</b> ".$bggid."<br/>";
+									echo"<b>Description :</b> ".$descript."<br/>";
+											$req02="SELECT ext_LIB FROM tx_jeuextbase_ext WHERE ext_ID='$baseext'";
 											$res02=mysql_query($req02);
 											$ext_LIB=mysql_fetch_row($res02);
-									echo"<b>Base ou extension :</b> ".$ext_LIB[0]."</br>";
-									echo"<b>Année :</b> ".$An."</br>";
-									echo"<b>Editeur :</b> ".$Editeur."</br>";
+									echo"<b>Base ou extension :</b> ".$ext_LIB[0]."<br/>";
+									echo"<b>Année :</b> ".$an."<br/>";
+									echo"<b>Editeur :</b> ".$editeur."<br/>";
+											$req07="SELECT csl_LIB FROM tx_jeuconseil_csl WHERE csl_ID='$conseil'";
+											$res07=mysql_query($req07);
+											$csl_LIB=mysql_fetch_row($res07);
+									echo"<b>Conseil :</b> ".$csl_LIB[0]."<br/>";
+											$req09="SELECT thm_LIB FROM tx_jeutheme_thm WHERE thm_ID='$theme'";
+											$res09=mysql_query($req09);
+											$thm_LIB=mysql_fetch_row($res09);
+									echo"<b>Thème :</b> ".$thm_LIB[0]."<br/>";
+											$req10="SELECT jtp_LIB FROM tx_jeutype_jtp WHERE jtp_ID='$jeutype'";
+											$res10=mysql_query($req10);
+											$jtp_LIB=mysql_fetch_row($res10);
+									echo"<b>Type :</b> ".$jtp_LIB[0]."<br/>";
+											$req03="SELECT pbl_LIB FROM tx_public_pbl WHERE pbl_ID='$public'";
+											$res03=mysql_query($req03);
+											$pbl_LIB=mysql_fetch_row($res03);
+									echo"<b>Public :</b> ".$pbl_LIB[0]."</br>";
 									echo"<b>Nombre mini :</b> ".$min."</br>";
 									echo"<b>Nombre maxi :</b> ".$max."</br>";
-									echo"<b>Age mini :</b> ".$agemin."</br>";
-									echo"<b>Durée moy. :</b> ".$duree." minutes</br>";
+										$req11="SELECT gmi_LIB FROM tx_joueuragemin_gmi WHERE gmi_ID='$agemin'";
+										$res11=mysql_query($req11);
+										$gmi_LIB=mysql_fetch_row($res11);
+									echo"<b>Age mini :</b> ".$gmi_LIB[0]."</br>";
+										$req12="SELECT dur_LIB FROM tx_jeuduree_dur WHERE dur_ID='$duree'";
+										$res12=mysql_query($req12);
+										$dur_LIB=mysql_fetch_row($res12);
+									echo"<b>Durée moy. :</b> ".$dur_LIB[0]." minutes</br>";
 									echo"<b>Règles :</b> ".$regles."</br>";
-									echo"<b>Règles PJ :</b> ".$reglesPJ."</br>";
+									echo"<b>Règles PJ :</b> ".$numregles."</br>";
 									if (!isset($_POST['monfichier'])) {	$monfichier =''; }
 									else
 									{	$monfichier = $_POST['monfichier'];
@@ -419,22 +483,23 @@ echo		 "---> <u>".$ch1. "</u> existe déjà.<br/>";?>
 									} // fin else (isset($_POST['monfichier'])
 ?>
 			<form action="maj.php" method="post" >
-				<input type="hidden" name="Design" value="<?php echo $Design;?>" />
-				<input type="hidden" name="DesignVO" value="<?php echo $DesignVO;?>" />
-				<input type="hidden" name="BGGID" value="<?php echo $BGGID;?>" />
-				<input type="hidden" name="Descript" value="<?php echo $Descript;?>" />
-				<input type="hidden" name="BaseEx" value="<?php echo $BaseEx;?>" />
-				<input type="hidden" name="An" value="<?php echo $An;?>" />
-				<input type="hidden" name="Editeur" value="<?php echo $Editeur;?>" />
+				<input type="hidden" name="design" value="<?php echo $design;?>" />
+				<input type="hidden" name="designvo" value="<?php echo $designvo;?>" />
+				<input type="hidden" name="bggid" value="<?php echo $bggid;?>" />
+				<input type="hidden" name="descript" value="<?php echo $descript;?>" />
+				<input type="hidden" name="baseext" value="<?php echo $baseext;?>" />
+				<input type="hidden" name="an" value="<?php echo $an;?>" />
+				<input type="hidden" name="editeur" value="<?php echo $editeur;?>" />
 				<input type="hidden" name="conseil" value="<?php echo $conseil;?>" />
-				<input type="hidden" name="type" value="<?php echo $type;?>" />
+				<input type="hidden" name="jeutype" value="<?php echo $jeutype;?>" />
+				<input type="hidden" name="public" value="<?php echo $public;?>" />
 				<input type="hidden" name="theme" value="<?php echo $theme;?>" />
 				<input type="hidden" name="min" value="<?php echo $min;?>" />
 				<input type="hidden" name="max" value="<?php echo $max;?>" />
 				<input type="hidden" name="duree" value="<?php echo($duree);?>" />
 				<input type="hidden" name="agemin" value="<?php echo($agemin);?>" />
-				<input type="hidden" name="regles" value="<?php echo($Regles);?>" />
-				<input type="hidden" name="reglesPJ" value="<?php echo($reglesPJ);?>" />
+				<input type="hidden" name="regles" value="<?php echo($regles);?>" />
+				<input type="hidden" name="numregles" value="<?php echo($numregles);?>" />
 				<input type="hidden" name="monfichier" value="<?php echo $nomfichier;?>" />
 				<input type="submit" name="envoi" value="Ajouter l'article à la base" /><br/>
 			</form>
