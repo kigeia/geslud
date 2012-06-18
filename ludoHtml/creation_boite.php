@@ -8,12 +8,6 @@
 				//			POST	second, affich, boite, checky, numer, nom, ok, creation
 				//			BDD		te_exemplaire2_exp, te_boite2_bte, te_article_art
 				//		class	bodystyle, titrelien, vert, notice, paragraphe, zoneCorpsDoc
-
-
-
-
-
-
 								session_start();
 								$_SESSION['page'] = 'creation_boite';	// mise en cache du num de page pour onglet coloré
 								$utilisateur_ID=$_SESSION['utilisateur_ID'];
@@ -30,6 +24,7 @@
 			<span><a href='creation_boite.php' class='vert titrelien'><span> Exemplaire->Boite </a></span> - 
 			<span><a href='creation_carton.php' class='titrelien'><span> Boite->Carton </a></span>
 		</h5></div>
+
 <!------DEBUT NOTICE DROITE------------------>
 		<div class='notice'>
 			<h6>Notice simplifiée</h6>
@@ -40,7 +35,7 @@
 				<li>4. clic sur déplacer,</li>
 				<li>5. constater résultat.</li>
 			</ul></br>
-</div><!-- ---------FIN NOTICE DROITE--------------------------------->
+</div>
 
 <!------------DEBUT DU TEXTE DROITE------------------------------------------------>
 		<div class='paragraphe'><h6>Objectif de la page</h6>
@@ -51,7 +46,7 @@
 				<li>déplacer une boite de jeux vers un lieu,</li>
 				<li>déplacer un exemplaire dans une boite.</li>
 			<ul></br></br>
-		</div><!--------FIN DU TEXTE DROITE---->
+		</div>
 
 <!----DEBUT DU CORPS DE LA PAGE-----------------------------------------------------------	-->	
 <div class="zoneCorpsDoc">
@@ -60,36 +55,37 @@
 										//sinon si on reçoit le formulaire de mouvement de boites
 									$boite=$_POST['boite'];
 									if (isset($_POST['checky']) && !empty($_POST['checky'])) 
-									{	foreach ($_POST['checky'] as $checky) 
-										{	mysql_query("UPDATE te_exemplaire2_exp SET bte_ID='$boite' exp_mod_DAA='$utilisateur_ID' WHERE exp_ID='$checky'");
+									{	$exp_mod_DAA = date("Y-m-d H:i:s");
+										foreach ($_POST['checky'] as $checky) 
+										{	$req01="UPDATE te_exemplaire2_exp SET bte_ID='$boite' exp_mod_DAA='$exp_mod_DAA' exp_mod_UAA='$utilisateur_ID' WHERE exp_ID='$checky'";
+											mysql_query($req01);
 										}
 									} // fin if (isset($_POST['checky'])
 								} // fin if(isset($_POST['second'])
 //table qui contient les formulaires de recherche et de sélection
 echo '<table>	
 		<tr><td style="height:80px">';
-								$jo=date("d");
-								$mo=date("m");
-								$an=date("Y");
-								$date=''.$jo.'/'.$mo.'/'.$an.'';
-								$he=date("H");
-								$min=date("i");
-								$heure=''.$he.'h'.$min.'';
 								if(isset($_POST['oui']))
 								{	if(isset($_POST['numer']))
 									{	$numer=$_POST['numer'];
 										$art_LIB=$_POST['nom'];
 										$art_LIB0=$art_LIB.'_B'.$numer.'';
-										mysql_query("INSERT INTO te_boite2_bte VALUES('','$art_LIB','1','$art_LIB0','','','','','','','','$date','','$heure')");
+										$exp_crea_DAA = date("Y-m-d H:i:s");
+										$req02="INSERT INTO te_boite2_bte (bte_LIB,bte_num,bte_LIB0,bte_crea_DAA,bte_crea_UAA)"
+										."VALUES('$art_LIB','1','$art_LIB0','$exp_crea_DAA','$utilisateur_ID')";
+										mysql_query($req02);
 		echo 'La boite '.$art_LIB.'_B'.$numer.' vient d\'être créée';
-									}
+									} // fin if(isset($_POST['numer']))
 									else
-									{	$art_LIB=$_POST['nom'];
+									{	$exp_crea_DAA = date("Y-m-d H:i:s");
+										$art_LIB=$_POST['nom'];
 										$art_LIB0=$art_LIB.'_B1';
-										mysql_query("INSERT INTO te_boite2_bte VALUES('','$art_LIB','1','$art_LIB0','','','','','','','','$date','','$heure')");
+										$req03="INSERT INTO te_boite2_bte (bte_LIB,bte_num,bte_LIB0,bte_crea_DAA,bte_crea_UAA)"
+										."VALUES('$art_LIB','1','$art_LIB0','$exp_crea_DAA',''$utilisateur_ID')";
+										mysql_query($req03);
 		echo 'La boite '.$art_LIB."_B1 vient d'être créée";
-									}
-								}
+									} // fin else (isset($_POST['numer']))
+								} // fin if(isset($_POST['oui']))
 								else if(isset($_POST['ok']))
 								{	$nom=$_POST['nom'];
 									$art_LIB0=$nom.'_B1';

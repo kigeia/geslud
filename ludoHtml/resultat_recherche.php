@@ -95,7 +95,7 @@
 											$nbarticle=mysql_num_rows($res);
 	echo				'- '.$nbarticle.' articles (dont ';
 											// nb d'articles qui ne sont pas des jeux
-											$req2="SELECT art_id FROM te_article_art WHERE art_materielType_DA<>'jeu'";
+											$req2="SELECT art_id FROM te_article_art WHERE art_materieltype<>'jeu'";
 											$res2=mysql_query($req2);
 											$nbdivers=mysql_num_rows($res2);
 	echo				$nbdivers.' qui ne sont pas des jeux),<br/>';

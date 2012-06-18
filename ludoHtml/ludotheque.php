@@ -53,7 +53,7 @@
 
 <?php									if ($_SESSION['usr_droit9']==1) {	?>
 		<h3>Recherche rapide</h3> 
-	<div class='question gauche'><!--X-->Des caractéristiques et du lieu où se trouve le jeu
+	<div class='question gauche'><!--X--><span style='color:blue'><b>Sur un jeu</b></span> (caractéristiques et lieu où il se trouve)
 	<input type='texte' name='jeu' id='jeu' size='42' maxlength='40' placeholder="Ex : Himalaya"></div>
 	<input type="submit" name="X" value="ok" class='ok'/>
 <?php																	}	?>

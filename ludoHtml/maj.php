@@ -452,7 +452,8 @@ echo		 "---> <u>".$ch1. "</u> existe déjà.<br/>";?>
 										$elementsChemin = pathinfo($fichier);
 										$extensionFichier = $elementsChemin['extension'];
 										$extensions = array('png', 'gif', 'jpg', 'jpeg', 'PNG', 'GIF', 'JPG', 'JPEG');
-										$req_ID=mysql_query("SELECT art_ID FROM te_article_art ORDER BY art_ID DESC LIMIT 0,1");
+										$req14="SELECT art_ID FROM te_article_art ORDER BY art_ID DESC LIMIT 0,1";
+										$req_ID=mysql_query($req14);
 										while(list($art_ID)=mysql_fetch_array($req_ID))
 										{	$art_act=$art_ID+1;
 										}

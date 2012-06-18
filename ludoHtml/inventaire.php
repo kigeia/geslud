@@ -46,31 +46,20 @@
 			<ul><li>déplacer des boites de jeux (ou des cartons) vers un lieu,</li>
 				<li>créer un lieu,</li>
 			</ul></br></br>
-		</div><!-- ---------FIN DU TEXTE DROITE--------------------------------->
-<!-----DEBUT DU CORPS DE LA PAGE----------------------	-->
+		</div>
+
+<!-----DEBUT DU CORPS DE LA PAGE------------------------------------------------------------------->
 
 <div class="zoneCorpsDoc">
-<?php				
-						/* recuparation ID du lieu sélectionné*/	
+<?php	//--- recuparation ID du lieu sélectionné-------------------------------------------------------
 
-						//si on reçoit le formulaire
+					//si on reçoit le formulaire
 								if(isset($_POST['premier']))
-								{	$jo=date("d");
-									$mo=date("m");
-									$an=date("Y");
-									$he=date("H");
-									$min=date("i");
-									$sec=date("s");
-									$date=''.$jo.'/'.$mo.'/'.$an.'';
-									$dateinsert=''.$an.'-'.$mo.'-'.$jo.'';
-									$heur=''.$he.'h'.$min.'';
-									$heureinsert=''.$he.':'.$min.':'.$sec.'';
-									$dateheureinsert=''.$an.'-'.$mo.'-'.$jo.' '.$he.':'.$min.':'.$sec.'';
-									$lieu1=$_POST['lieu1'];
+/**/							{	$lieu1=$_POST['lieu1'];
 									$carton=$_POST['carton'];
 									//		$idd=$_POST['idd'];
-						//si l'on reçoit une ou plusieurs checkbox cochée (s)
 
+					//si l'on reçoit une ou plusieurs checkbox cochée (s)
 									if (isset($_POST['checky']) && !empty($_POST['checky']))
 									{	foreach ($_POST['checky'] as $checky) 
 										{	
@@ -79,22 +68,20 @@
 													//	echo $lieu1;
 												} // fin if (!isset($lieu1))
 												if ($lieu1!='aucun')
-												{
-													$rechercheIdLieu=mysql_query("SELECT lie_ID FROM tx_lieu_lie WHERE lie_LIB = '$lieu1'");
+												{	$req01="SELECT lie_ID FROM tx_lieu_lie WHERE lie_LIB = '$lieu1'";
+													$rechercheIdLieu=mysql_query($req01);
 													//	echo 'req : '.$rechercheIdLieu;
 													list($lieu1_ID)=mysql_fetch_array($rechercheIdLieu);
 /**/												// echo "<div class = 'paragraphe'>Lieu1_ID : ".$lieu1_ID.'</div></br/>';
 													//	echo 'dateinsert : '.$dateinsert.'<br/>';
 													echo 'checky : '.$checky.'<br/>';
-													
-													
-													
-													
-													
-													
-/**/												mysql_query("INSERT INTO th_mouvement_mvt VALUES('','$checky','$lieu1_ID','1','mvt',CURRENT_TIMESTAMP,'','$utilisateur_ID')");
+													$mvt_DAA = date("Y-m-d H:i:s");
+													$req02="INSERT INTO th_mouvement_mvt (bte_ID,lie_ID,mvt_DAA,mvt_UAA)"
+																."VALUES('$checky','$lieu1_ID','$mvt_DAA','$utilisateur_ID')";
+/**/												$res02=mysql_query($req02);
 //														$res=mysql_query("UPDATE te_boite2_bte SET lie_ID='$lieu1_ID'");
-													$res=mysql_query("UPDATE te_boite2_bte SET lie_ID='$lieu1_ID',bte_mvt_DAA=CURRENT_TIMESTAMP,bte_mvt_UAA='$utilisateur_ID' WHERE bte_ID='$checky'");
+													$req03="UPDATE te_boite2_bte SET lie_ID='$lieu1_ID',bte_mvt_DAA='$mvt_DAA',bte_mvt_UAA='$utilisateur_ID' WHERE bte_ID='$checky'";
+													$res03=mysql_query($req03);
 												} // fin else ($lieu1=='aucun')
 										} // fin foreach ($_POST['checky'] as $checky) 
 									} // fin if $_POST['checky']) : (=au moins une boite sélectionnée) existe et non vide 
@@ -110,9 +97,13 @@
 										{	if($lieu1!='aucun' && $_POST['radio']=='mvtcarton' && $carton!='')
 											{		//si lieu et carton ne sont pas vides
 													//on sélectionne bte_ID dans la table te_boite2_bte...
-												$numcrt=mysql_query("SELECT bte_ID FROM te_boite2_bte WHERE crt_LIB='$carton'");
+												$req04="SELECT bte_ID FROM te_boite2_bte WHERE crt_LIB='$carton'";
+												$numcrt=mysql_query($req04);
+												$mvt_DAA = date("Y-m-d H:i:s");
 												while(list($bte_ID)=mysql_fetch_array($numcrt))
-/**/											{	$res=mysql_query("INSERT INTO th_mouvement_mvt VALUES('','$bte_ID','$lieu1','1','mvt',CURRENT_TIMESTAMP,'','$utilisateur_ID')") or die('erreur'); // modifiée par pbo r/ BDD
+/**/											{	$req05="INSERT INTO th_mouvement_mvt (bte_ID,lie_ID,mvt_DAA,mvt_UAA) "
+													."VALUES('$bte_ID','$lieu1','$mvt_DAA','$utilisateur_ID')";
+													$res=mysql_query($req05) or die('erreur');
 /**/													// echo $res; // pour tester validité requete
 												} // fin while
 											} // fin else lieu et carton non vides
@@ -128,7 +119,8 @@
 				<input type='radio' name='radio' value='mvtcarton'/> Mouvement par carton :
 				<select name='carton'>
 					<option value='' selected='selected'>aucun</option>
-<?php											$liste1=mysql_query("SELECT crt_LIB FROM te_carton_crt ORDER BY crt_LIB");
+<?php											$req06="SELECT crt_LIB FROM te_carton_crt ORDER BY crt_LIB";
+												$liste1=mysql_query($req06);
 												while(list($crt_LIB)=mysql_fetch_array($liste1))
 												{
 ?>					<option value="<?php echo $crt_LIB;?>"><?php echo $crt_LIB;?></option>
@@ -157,7 +149,9 @@
 							{$lieu1='aucun';}
 							//$lieu1 est la variable qui est envoyée par la sélection du lieu dont le bouton se trouve plus bas à la ligne 330. Donc si elle n'est pas vide...
 //								echo "philippe15 : lieu1 : $lieu1<br/>";
-								$boiteshorslieu=mysql_query("SELECT bte_ID,crt_LIB,bte_LIB1,bte_mvt_DAA,bte_mvt_UAA,lie_LIB FROM te_boite2_bte, tx_lieu_lie WHERE ((te_boite2_bte.lie_ID = tx_lieu_lie.lie_ID) AND (tx_lieu_lie.lie_LIB !='$lieu1') AND (bte_LIB1<>'')) ORDER BY bte_LIB1");
+								$req07="SELECT bte_ID,crt_LIB,bte_LIB1,bte_mvt_DAA,bte_mvt_UAA,lie_LIB "
+								."FROM te_boite2_bte, tx_lieu_lie WHERE ((te_boite2_bte.lie_ID = tx_lieu_lie.lie_ID) AND (tx_lieu_lie.lie_LIB !='$lieu1') AND (bte_LIB1<>'')) ORDER BY bte_LIB1";
+								$boiteshorslieu=mysql_query($req07);
 //								// echo 'req : '.$boiteshorslieu;
 							while(list($bte_ID,$crt_LIB,$bte_LIB1,$bte_mvt_DAA,$bte_mvt_UAA,$lie_LIB)=mysql_fetch_array($boiteshorslieu))
 								{
@@ -190,7 +184,10 @@ echo		"<table id='".$i."'>";
 		<input type="submit" value="créer"/><br/>
 <?php							if(isset($_POST['crealieu']) AND $_POST['crealieu']!='')
 								{	$crealieu=fsecure($_POST['crealieu']);
-									mysql_query("INSERT INTO tx_lieu_lie VALUES('','$crealieu','','1','lie',CURRENT_TIMESTAMP,'$utilisateur_ID')");
+									$mvt_DAA = date("Y-m-d H:i:s");
+									$req08="INSERT INTO tx_lieu_lie ($lie_LIB,lie_crea_DAA,lie_crea_UAA)"
+										."VALUES('$crealieu','$mvt_DAA','$utilisateur_ID')";
+									mysql_query($req08);
 								}
 ?>			Choix du lieu : 
 			<select name='lieu1' id='lieu1'>
@@ -210,8 +207,8 @@ echo			"<option value='aucun' selected='selected'>aucun</option>";
 											}
 											// si $lieu1 n'est pas vide ('aucun')
 											if($lieu1!='aucun')
-											{	
-												$liste1=mysql_query("SELECT lie_LIB FROM tx_lieu_lie ORDER BY lie_LIB");
+											{	$req09="SELECT lie_LIB FROM tx_lieu_lie ORDER BY lie_LIB";
+												$liste1=mysql_query($req09);
 												while(list($lie_LIB)=mysql_fetch_array($liste1))
 												{		//là encore, rebelote
 													if($lieu1==$lie_LIB)
@@ -227,7 +224,8 @@ echo			"<option value='".$lie_LIB."' selected='selected'>".$lie_LIB."</option>";
 											else
 											{		//si $lieu1 est vide
 ?>				<option value="aucun" selected="selected">Aucun</option>
-<?php											$liste1=mysql_query("SELECT lie_LIB FROM tx_lieu_lie ORDER BY lie_LIB");
+<?php											$req10="SELECT lie_LIB FROM tx_lieu_lie ORDER BY lie_LIB";
+												$liste1=mysql_query($req10);
 												while(list($lie_LIB)=mysql_fetch_array($liste1))
 												{
 ?>				<option value="<?php echo $lie_LIB;?>"><?php echo $lie_LIB;?></option>
@@ -255,7 +253,9 @@ echo "		sélectionné : <span style='color:green;font-weight:bold'>".$lieu1."</s
 	<div class='corpstableau'>
 <?php							$i=0; //on définit la variable $i
 									//sélection des boites dans la table (jointure avec table lieu)
-										$boitesdulieu=mysql_query("SELECT crt_LIB,bte_LIB1,bte_mvt_DAA,bte_mvt_UAA FROM te_boite2_bte, tx_lieu_lie WHERE (te_boite2_bte.lie_ID = tx_lieu_lie.lie_ID) AND tx_lieu_lie.lie_LIB ='$lieu1'");
+										$req11="SELECT crt_LIB,bte_LIB1,bte_mvt_DAA,bte_mvt_UAA "
+										."FROM te_boite2_bte, tx_lieu_lie WHERE (te_boite2_bte.lie_ID = tx_lieu_lie.lie_ID) AND tx_lieu_lie.lie_LIB ='$lieu1'";
+										$boitesdulieu=mysql_query($req11);
 											// echo 'req : '.$boitesdulieu;
 										while(list($crt_LIB,$bte_LIB1,$bte_mvt_DAA,$bte_mvt_UAA)=mysql_fetch_array($boitesdulieu))
 											{
@@ -268,7 +268,8 @@ echo "		sélectionné : <span style='color:green;font-weight:bold'>".$lieu1."</s
 	echo			"<td class='cellule20 libelle21'>".$bte_LIB1."</td>";
 /*//												echo $date->format('Y-m-d H:i:s'); */
 	echo			"<td class='cellule20 datemvt20'>".$bte_mvt_DAA."</td>";
-												$rechercheLibUser=mysql_query("SELECT usr_LIB FROM te_utilisateur_usr WHERE usr_ID = '$bte_mvt_UAA'");
+												$req12="SELECT usr_LIB FROM te_utilisateur_usr WHERE usr_ID = '$bte_mvt_UAA'";
+												$rechercheLibUser=mysql_query($req12);
 												//	echo 'req : '.$rechercheIdLieu;
 												list($modificateurLib)=mysql_fetch_array($rechercheLibUser);
 	echo			"<td class='cellule20 auteurmvt20'>".$modificateurLib."</td>";

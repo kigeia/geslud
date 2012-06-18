@@ -284,9 +284,9 @@
 				<strong>Public :</strong>
 <?php	//							$thm_ID0=$thm_ID;
 ?>				<select name="public">
-<?php								$req06="SELECT * FROM tx_public_pbl ORDER BY pbl_RG ASC";
-									$res06 = mysql_query($req06);
-									while(list($pbl_ID0,$pbl_LIB0)=mysql_fetch_array($res06))
+<?php								$req15="SELECT * FROM tx_public_pbl ORDER BY pbl_RG ASC";
+									$res15 = mysql_query($req15);
+									while(list($pbl_ID0,$pbl_LIB0)=mysql_fetch_array($res15))
 									{	if($pbl_ID0==$pbl_ID)
 										{
 	echo			"<option value='".$pbl_ID0."' selected='selected'>".$pbl_LIB0.'</option>';
