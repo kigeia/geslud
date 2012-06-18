@@ -6,10 +6,11 @@
 			//		->	SESSION	connexion, usr_droit4, logingeslud, utilisateur_ID
 			//		<-	SESSION	page, 
 			//			POST	envoi,verif,reset, design,designvo,bggid,descript,art_LIB1,baseext,an,editeur,
-			//			POST(suite) conseil,theme,type,min,max,duree,agemin,regles,reglesPJ,monfichier,
+			//			POST(suite) conseil,theme,type,min,max,duree,agemin,regles,reglesPJ,nomfichier,
 			//			BDD		te_article_art,te_exemplaire2_exp,tx_jeuconseil_csl,tx_jeutype_jtp,
 			//			BDD(suite) tx_jeutheme_thm,tx_joueuragemin_gmi,tx_jeuduree_dur
 								session_start();
+								include_once('varlook3.php');
 								if (!isset($_SESSION['connexion']))
 								{	echo "vous n'etes pas (ou plus) connecté : veuillez passer par la page d'accueil <a href='../index.php'> ici </a>"; }
 								else
@@ -26,21 +27,18 @@
 											headhtml("maj","maj");
 										$logingeslud=$_SESSION['logingeslud'];
 										$utilisateur_ID=$_SESSION['utilisateur_ID'];
-?>
-<body>
+										include "include/menu.inc.php";
+?><body>
 <div class="bodystyle"><br/>
-<!--  ------------- MENU --------------------------->
-<?php									include "include/menu.inc.php";
-?>
-<!-- TITRE DU DOCUMENT -->
+<!-- TITRE DU DOCUMENT ------------------------------------------------------------------------------------->
 	<div class='titre'>
 		<h5>Mise à jour -
 			<span><a href='maj.php' class='vert titrelien'> Création article </a></span> - 
 			<span><a href='modification_article.php' class='titrelien'><span> Modification article </a></span>
 		</h5>
-	</div><!-- FIN DU TITRE DU DOCUMENT -->
-		
-<!------DEBUT NOTICE DROITE------------------>
+	</div>
+
+<!------DEBUT NOTICE DROITE------------------------------------------------------------->
 	<div class='notice'>
 		<h6>Notice simplifiée</h6>
 		<h7>Création d'un article</h7>
@@ -51,8 +49,9 @@
 			<li>5. vérifier,</li>
 			<li>6. clic sur ajouter à la base.</li>
 		</ul></br>
-	</div><!-- ---------FIN NOTICE DROITE--------------------------------->
-<!--DEBUT DU TEXTE DROITE---------------------------------------->
+	</div>
+
+<!--DEBUT DU TEXTE DROITE------------------------------------------------------------------>
 	<div class='paragraphe'><h6>Objectif de la page</h6>
 		<h7>permettre au responsable des Jeux de l'association REEL de :</h7>
 			<ul>
@@ -65,7 +64,7 @@
 					les multiples exemplaires d'un jeu.</li>
 			<ul><br/><br/>
 	</div><!-- ------------------------------ FIN DU TEXTE DROITE---->
-<!--	------------------------DEBUT DU CORPS DE LA PAGE-----------------------------------------------------------	-->	
+<!--	------------------------DEBUT DU CORPS DE LA PAGE------------------------------------->
 	<div class="zoneCorpsDoc">
 <?php
 					if(isset($_POST['reset']))
@@ -86,7 +85,9 @@
 						$agemin = '';
 						$regles = '';
 						$numregles = '';
-						$monfichier = '';
+						$nomfichier = '';
+/*ajout 18/06*/			unset($_POST);
+/*ajout 18/06*/			unset($_FILES);
 						// $art=$_POST['art'];  présent uniquement dans fichier modif article
 					}
 					else if(isset($_POST['envoi']))
@@ -108,12 +109,12 @@
 						$agemin = $_POST['agemin'];
 						$regles = fsecure($_POST['regles']);
 						$numregles = fsecure($_POST['numregles']);
-						$monfichier = $_POST['monfichier'];
-						$art_crea_DAA = date("Y-m-d-H:i:s");
+						$nomfichier = $_POST['nomfichier'];
+						$art_crea_DAA = date("Y-m-d H:i:s");
 
 							$req01="INSERT INTO te_article_art (art_LIB,art_TXT,art_MOD,art_TRI,ext_ID,pbl_ID,jmx_ID,thm_ID,jtp_ID,csl_ID,gmi_ID,dur_ID,art_bgg_ID,art_designationVO,art_image_IMG,art_editionannee,art_editeur,art_nbjoueurmin,art_regles,art_reglenum,art_materieltype,art_crea_DAA,art_crea_UAA)"
-									."VALUES('$design','$descript','1','art','$baseext','$public','$max','$theme','$jeutype','$conseil','$agemin','$duree','$bggid','$designvo','$monfichier','$an','$editeur','$min','$regles','$numregles','jeu',CURRENT_TIMESTAMP(14),'$utilisateur_ID')";
-	//								."VALUES('','$design','','$descript','1','art','','$BaseEx','','','','','','','','$bggid','$designvo','$monfichier','$an','$editeur','$min','$regles','$reglesPJ','jeu','',CURRENT_TIMESTAMP,'$heure','$utilisateur_ID','','','','','','')";
+									."VALUES('$design','$descript','1','art','$baseext','$public','$max','$theme','$jeutype','$conseil','$agemin','$duree','$bggid','$designvo','$nomfichier','$an','$editeur','$min','$regles','$numregles','jeu',CURRENT_TIMESTAMP(14),'$utilisateur_ID')";
+	//								."VALUES('','$design','','$descript','1','art','','$BaseEx','','','','','','','','$bggid','$designvo','$nomfichier','$an','$editeur','$min','$regles','$reglesPJ','jeu','',CURRENT_TIMESTAMP,'$heure','$utilisateur_ID','','','','','','')";
 							$res01=mysql_query($req01); // creation d'un nouvel article
 						$req04="SELECT art_ID FROM te_article_art WHERE art_LIB='$design'";
 						$calq=mysql_query($req04);
@@ -146,19 +147,22 @@
 								$duree = $_POST['duree'];
 								$agemin = $_POST['agemin'];
 								$regles = fsecure($_POST['regles']);
-								$numregles = fsecure($_POST['numregles']);	
-								if  (isset($_POST['monfichier'])) $monfichier = $_POST['monfichier'];
+								$numregles = fsecure($_POST['numregles']);
+					//			$nomfichier = $_POST['nomfichier'];
+/*sup le 18/06*/				if  (isset($_POST['nomfichier'])) $nomfichier = $_POST['nomfichier'];
 								$log_UAA=$_SESSION['logingeslud'];
 							}
 						}
 					}
-// 	------------------------DEBUT DU CORPS DE LA PAGE-----------------------------------------------------------	-->	
+// 	------------------------DEBUT DU CORPS DE LA PAGE------------------------------------------------------------------>
 				if(isset($_POST['envoi'])) // réception formulaire validé
 				{	if($res01)	// requete de mise à jour OK
-					{	echo $art_crea_DAA;
-						echo 'L\'article <b>'.$design.'</b> a été créé.<br/>';
-						echo "L\'exemplaire <b>".$Design0.'</b> a été créé.';
-					}
+					{	echo "<span style='color:red'>L'article <b>".$design.'</b> a été créé le '.$art_crea_DAA.'</span><br/>';
+						echo "L'exemplaire <b>".$Design0.'</b> a été créé.';
+?>						<form action="maj.php" method="post" enctype="multipart/form-data"  >
+							<input type="submit" name='reset' value="retour à la création article"/>
+						</form>
+<?php				}
 					else
 					{	echo $res01."Echec lors de la création de l'article";	}
 				}
@@ -167,7 +171,7 @@
 					else
 					{	$design='';}
 ?>
-<!----------DEBUT BLOC NOMARTICLE--	-->
+<!----------DEBUT BLOC NOMARTICLE----------------------------------------------------------------------------------------->
 			<table>
 				<tr>
 					<td>
@@ -178,7 +182,7 @@
 								<input type="submit" value="Existe-il ?"/>
 						</form>
 <?php												}
-								if (isset ($_POST['designvo']))	// ajout suite à pb declaration variable esign_VO
+								if (isset ($_POST['designvo']))	// ajout suite à pb declaration variable design_VO
 								{$designvo=fsecure($_POST['designvo']);	}
 								else
 								{	$designvo='';
@@ -199,18 +203,17 @@
 									$numregles='';
 								}
 								$Des=trim($design); // suppression des espaces avant et après
-								if($Des!='' AND !isset($_POST['monFichier']))
+								if($Des!='' AND !isset($_POST['nomfichier']))
 								{	$result=mysql_query("SELECT * FROM te_article_art WHERE art_LIB LIKE '%$design%'") or die(mysql_error()); 
 									if(mysql_numrows($result)==0) //Récupère le nombre de lignes d'un jeu de résultat
 									{	echo "Aucun article ne correspond à la recherche <b>".$design."</b><br/><br/>";
-?>
-		<fieldset>
+?>		<fieldset>
 			<form action="maj.php" method="post" enctype="multipart/form-data"  >
 				<input name="design" type="hidden" id="design" value="<?php echo $design;?>"/>
 				<strong>Désignation VO</strong> <input type="text" name="designvo" value="<?php echo $designvo;?>"size="24" maxlength="20"/>
 				<strong>BGG ID</strong> <input type="text" name="bggid" value="<?php echo $bggid;?>"size="6" maxlength="6"/><br/>
-					<!--	----------------------------FIN BLOC NOM ARTICLE--	-->
-<!--	---------DEBUT BLOC DESCRIPTIFLONG----------------------------------------------------------------------------->
+
+<!--	---------DEBUT BLOC DESCRIPTIF LONG----------------------------------------------------------------------------->
 				<strong>Descriptif détaillé</strong></br><textarea name="descript" value="<?php echo $descript;?>" cols="50" rows="4"><?php echo $descript;?></textarea><br/>
 
 <!----------DEBUT BLOC BASE OU EXTENSION----------------------------------------------------------------------------------->
@@ -320,7 +323,7 @@
 													}
 												}
 ?>
-				</select><!--Fin de branchement base de donnée pour la valeur Age mini	-->
+				</select>
 
 <!-------début BLOC Durée--------------------------------------------------------------------------------------------------------------------->
 				<strong>Durée (en min):</strong> 
@@ -336,22 +339,23 @@
 	echo			'<option value="'.$dur_ID.'">'.$dur_LIB.'</option>';
 													}
 												}
-	echo		"</select><br/>";	//Fin de branchement base de donn�e pour la valeur Dur�e	
-												if (isset ($_POST['regles']))	// ajout suite à pb declaration variable design_VO
+	echo		"</select><br/>";
+
+// <!------------------DEBUT BLOC REGLES----------------------------------------------------------------------------------->
+												if (isset ($_POST['regles']))	// ajout suite à pb declaration variable
 												{	$regles=fsecure($_POST['regles']);}
 												else
 												{	$regles='';
 													$numregles='';
 												}
 ?>
+
 				<strong>Règles</strong> <input name="regles" type="text" id="art_RG" value="<?php echo $regles;?>" size="20" maxlength="20" />
 				<strong>N_regle (en_PJ)</strong> <input name="numregles" type="text" id="numregles" value="<?php echo $numregles;?>" size="6" maxlength="6" /><br/><br/>
-				<!--	----------------------------------FIN BLOC CONSEIL--	-->
-											
+
 <!------------------DEBUT BLOC IMAGE------------------------------------------------------------------------------------>
-											
 				<strong>Choisir Image</strong>(format de type png, gif, jpg, jpeg...) :</br>
-				<input type="file" name="monfichier" id="image"/><br />
+				<input type='file' name='nomfichier' id='image'/><br/>
 				<input type="submit" name="verif" value="Vérification de l'article avant ajout" />
 			</form>
 		</fieldset><!------------FIN BLOC ENREGISTRER--	-->
@@ -368,6 +372,7 @@
 												{
 echo		 "---> <u>".$ch1. "</u> existe déjà.<br/>";?>
 
+<!------BLOC formulaire CREATION DE L'EXEMPLAIRE ------------------------------------------------------------>
 			<form action="creation_Exemplaire.php" method="post" >
 				<input type="hidden" name="design" value="<?php echo($design);?>" />	
 				<input type="submit" value="Créer un exemplaire" />
@@ -394,8 +399,9 @@ echo		 "---> <u>".$ch1. "</u> existe déjà.<br/>";?>
 										} // fin while
 									} // fin else
 								}
-?>			</td> <!-- FIN BLOC NOM ARTICLE-------------------------------------------------------------------------------->
+?>			</td>
 
+<!------------------DEBUT BLOC vérification de la saisie avant envoi----------------------------------------------------------->
 <?php							if(isset($_POST['verif']))
 								{	echo '<td><br/><br/>';
 									echo"<b>Désignation :</b> ".$design."<br/>";
@@ -433,20 +439,16 @@ echo		 "---> <u>".$ch1. "</u> existe déjà.<br/>";?>
 										$req12="SELECT dur_LIB FROM tx_jeuduree_dur WHERE dur_ID='$duree'";
 										$res12=mysql_query($req12);
 										$dur_LIB=mysql_fetch_row($res12);
-									echo"<b>Durée moy. :</b> ".$dur_LIB[0]." minutes</br>";
-									echo"<b>Règles :</b> ".$regles."</br>";
-									echo"<b>Règles PJ :</b> ".$numregles."</br>";
-									if (!isset($_POST['monfichier'])) {	$monfichier =''; }
-									else
-									{	$monfichier = $_POST['monfichier'];
-
+									echo '<b>Durée moy. :</b> '.$dur_LIB[0].' minutes</br>';
+									echo '<b>Règles :</b> '.$regles."</br>";
+									echo '<b>Règles PJ :</b> '.$numregles.'</br>';
+/*ajout 18/06*/						if (($_FILES['nomfichier']['size'])==0) {	$nomfichier =''; }
+/**/								else {	$nomfichier = $_FILES['nomfichier']['name'];	// nom du fichier transmis par l'utilisateur
 // début bloc traitement upload images--------------------------------------------------------------------------------------------------
-										echo"<b>Image :</b> ".$monfichier."</br>";
-											//test_valeurs();
 										$dossier = 'images/';	// modif suite emplacement repertoire
-										$fichier = basename($_FILES['monfichier']['name']);
+										$fichier = basename($_FILES['nomfichier']['name']);
 										$taille_maxi = 100000;
-										$taille = filesize($_FILES['monfichier']['tmp_name']);
+										$taille = filesize($_FILES['nomfichier']['tmp_name']);
 										$elementsChemin = pathinfo($fichier);
 										$extensionFichier = $elementsChemin['extension'];
 										$extensions = array('png', 'gif', 'jpg', 'jpeg', 'PNG', 'GIF', 'JPG', 'JPEG');
@@ -454,7 +456,7 @@ echo		 "---> <u>".$ch1. "</u> existe déjà.<br/>";?>
 										while(list($art_ID)=mysql_fetch_array($req_ID))
 										{	$art_act=$art_ID+1;
 										}
-										//Début des vérifications de sécurité...
+								//Début des vérifications de sécurité...
 										if(!in_array($extensionFichier, $extensions)) //Si l'extension n'est pas dans le tableau
 										{	$erreur = '';
 										}
@@ -463,14 +465,16 @@ echo		 "---> <u>".$ch1. "</u> existe déjà.<br/>";?>
 										}
 										if(!isset($erreur)) //S'il n'y a pas d'erreur, on enregistre
 										{	//On formate le nom du fichier ici...
-											$nomDestination = $art_act.".".$extensionFichier;
+											$idIMG = $art_act.".".$extensionFichier;	// formate du nouveau nom du fichier image : id.extension
 	//										$fichier = strtr($fichier, 
 	//										'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ', 
 	//										'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
 	//										$fichier = preg_replace('/([^.a-z0-9]+)/i', '-', $fichier);
-											if(move_uploaded_file($_FILES['monfichier']['tmp_name'], $dossier . $nomDestination)) //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
-											{	echo"<b>Image :</b> ".$_FILES['monfichier']['name']."</br>";
-												echo'L\'image sera nommée '.$art_act.".".$extensionFichier;
+											if(move_uploaded_file($_FILES['nomfichier']['tmp_name'], $dossier . $idIMG)) //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
+											{	echo"<b>L'image :</b> ".$_FILES['nomfichier']['name']."</br>";
+												echo "<img src='".$dossier.$idIMG."' width='50'/><br/>";
+												echo' sera renommée '.$idIMG;
+												unset($_FILES); // http://localhost/justeunsite/ludotest/ludoHtml/Arraynimbus3d.jpg
 											}
 											else //Sinon (la fonction renvoie FALSE).
 											{	echo '<br/><br/><br/><br/><br/><br/>Echec de l\'enregistrement !';
@@ -479,8 +483,8 @@ echo		 "---> <u>".$ch1. "</u> existe déjà.<br/>";?>
 										else
 										{	echo $erreur;
 										}
-										$nomfichier=$dossier.$nomDestination;
-									} // fin else (isset($_POST['monfichier'])
+										$nomfichier=$idIMG;
+									} // fin else (isset($_POST['nomfichier'])
 ?>
 			<form action="maj.php" method="post" >
 				<input type="hidden" name="design" value="<?php echo $design;?>" />
@@ -500,12 +504,12 @@ echo		 "---> <u>".$ch1. "</u> existe déjà.<br/>";?>
 				<input type="hidden" name="agemin" value="<?php echo($agemin);?>" />
 				<input type="hidden" name="regles" value="<?php echo($regles);?>" />
 				<input type="hidden" name="numregles" value="<?php echo($numregles);?>" />
-				<input type="hidden" name="monfichier" value="<?php echo $nomfichier;?>" />
+				<input type="hidden" name="nomfichier" value="<?php echo $nomfichier;?>" />
 				<input type="submit" name="envoi" value="Ajouter l'article à la base" /><br/>
 			</form>
 			ou
 			<form action="maj.php" method="post" >
-				<input type="submit" name="reset" value="annuler">
+				<input type="submit" name="reset" value="Annuler">
 			</form>
 		</td></tr>
 <?php					} // fin if(isset($_POST['verif']))

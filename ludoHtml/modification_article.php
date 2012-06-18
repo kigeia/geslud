@@ -1,17 +1,18 @@
 <?php		//	utilise	include	include/connexion1.php
 			//					include/fonctions.inc.php : fsecure()
 			//					include/htmlhead.inc.php : headhtml()
-			//					varlook.php : look('toto'),  : analyse du contenu des variables cde : /*-*-*/look('toto22');
+			//					varlook3.php : analyse du contenu des variables cde : /*-*-*/look('toto22');
 			//					include/menu.inc.php
 			//			LINK	maj.php
 			//			CSS		css/maj.css : class(bodystyle,titrelien, marron, notice,paragraphe, zonecorpsdoc)
 			//		->	SESSION	connexion, usr_droit2, utilisateur_ID
 			//		<-	SESSION	page, 
 			//			POST	envoi,verif,reset, design,designvo,bggid,descript,art_LIB1,baseext,an,editeur,
-			//			POST(suite) conseil,theme,type,min,max,duree,agemin,regles,numregles,monfichier,
+			//			POST(suite) conseil,theme,type,min,max,duree,agemin,regles,numregles,nomfichier,
 			//			BDD		te_article_art,tx_jeuextbase_ext,tx_jeuconseil_csl,tx_jeutype_jtp,
 			//			BDD(suite) tx_jeutheme_thm,tx_joueuragemin_gmi,tx_jeuduree_dur
 								session_start();
+								include_once('varlook3.php'); 								
 								if (!isset($_SESSION['connexion']))
 								{	echo "vous n'etes pas (ou plus) connecté : veuillez passer par la page d'accueil <a href='../index.php'> ici </a>"; }
 								else
@@ -27,10 +28,9 @@
 										include_once("include/fonctions.inc.php");
 										include_once("include/htmlhead.inc.php");
 											headhtml("modif_article","maj");
-										include_once('varlook2.php'); 
 ?><body>
 <div class="bodystyle"><br/>
-<?php									include "./include/menu.inc.php";
+<?php									include "include/menu.inc.php";
 ?>
 <!-- TITRE DU DOCUMENT -------------------------------------------------------------------------------->
 		<div class='titre'>
@@ -92,21 +92,22 @@
 						if(!isset($_POST['agemin'])){$agemin='';}	else {$agemin = $_POST['agemin'];}
 						$regles = fsecure($_POST['regles']);
 						$numregles = fsecure($_POST['numregles']);
-						if(!isset($_POST['monfichier'])){$monfichier='';}	else {$monfichier = $_POST['monfichier'];}
-						$art_mod_DAA = date("Y-m-d-H:i:s");
+						if(!isset($_POST['nomfichier'])){$nomfichier='';}
+							else {$nomfichier = $_POST['nomfichier'];}
+						$art_mod_DAA = date("Y-m-d H:i:s");
 
 
-						if($monfichier!='') // si réception d'une image
+						if($nomfichier!='') // si réception d'une image
 						{		//test_valeurs();
-							$fichier = basename($_FILES['monfichier']['name']);
+							$fichier = basename($_FILES['nomfichier']['name']);
 							$taille_maxi = 100000;
-							$taille = filesize($_FILES['monfichier']['tmp_name']);
+							$taille = filesize($_FILES['nomfichier']['tmp_name']);
 							$elementsChemin = pathinfo($fichier);
 							$extensionFichier = $elementsChemin['extension'];
 							$extensions = array('png', 'gif', 'jpg', 'jpeg', 'PNG', 'GIF', 'JPG', 'JPEG');
-/* supprimé pendant un temps */		$design = $_POST['design'];
+							$design = $_POST['design'];
 
-//-----Début des vérifications de sécurité pour insertion du fichier image---------------------------------------------------------------------------------------
+//-----Début des vérifications de sécurité pour insertion du fichier image------------------------------------------
 							if(!in_array($extensionFichier, $extensions)) //Si l'extension n'est pas dans le tableau
 							{	 $erreur = "<br/><br/><br/><b>Le fichier n'a pas la bonne extension...</b>"; }
 							if($taille>$taille_maxi)
@@ -116,10 +117,10 @@
 							{		//On formate le nom du fichier ici...
 								$req01="SELECT art_ID FROM te_article_art WHERE art_LIB='$design'";
 								$res_ID=mysql_query($req01);
-								while(list($art_ID)=mysql_fetch_array($res_ID))
-								{	$nomdestination = $art_ID.".".$extensionFichier;
+								while(list($art_ID0)=mysql_fetch_array($res_ID))
+								{	$nomdestination = $art_ID0.".".$extensionFichier;
 								} // fin while
-								if(move_uploaded_file($_FILES['monfichier']['tmp_name'], $dossier . $nomdestination)) //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
+								if(move_uploaded_file($_FILES['nomfichier']['tmp_name'], $dossier.$nomdestination)) //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
 								{	$nom_image=$dossier.$nomdestination;
 									$req02="UPDATE te_article_art "
 										."SET art_TXT='$descript',jba_ID='$jeubaseid',ext_ID='$baseext',pbl_ID='$public',jmx_ID='$max',thm_ID='$theme',jtp_ID='$jeutype',"
@@ -129,10 +130,9 @@
 									mysql_query($req02);
 								} // fin if
 								else //Sinon (la fonction renvoie FALSE).
-								{	echo '<br/><br/><br/><br/><br/><br/>Echec de l\'enregistrement !';
-								} // fin else
-							}// fin if(move_uploaded_file($_FILES['monfichier']['tmp_name'],
-						}// fin if($monfichier!='')
+									echo '<br/><br/><br/><br/><br/><br/>Echec de l\'enregistrement !';	// fin else
+							}// fin if(move_uploaded_file($_FILES['nomfichier']['tmp_name'],
+						}// fin if($nomfichier!='')
 
 // -----DEBUT mise à jour si pas de transmission de fichier -------------------------------------------------------------------------------------------
 						else
@@ -147,7 +147,7 @@
 					} // fin if(isset($_POST['verif']))
 // 	--------DEBUT DU CORPS DE LA PAGE-----------------------------------------------------------	-->	
 											if(isset($_POST['verif']))
-	echo "<span style='color:red'>L\'article <b>".$art.'</b> a été modifié.</span><br/>'; // fin du if
+	echo "<span style='color:red'>L'article <b>".$art.'</b> a été modifié le '.$art_mod_DAA.' </span><br/>'; // fin du if
 ?>
 <!--	----DEBUT BLOC NOMARTICLE------------------------------------------------------------->
 <form action="modification_article.php" method="post" enctype="multipart/form-data"  >
@@ -335,16 +335,18 @@
 ?>				</select><br/>
 
 <!--------début bloc règles ------------------------------------------------------------------------------------------>
-				<strong>Règles</strong> <input name="regles" type="text" value="<?php echo $art_regles;?>" size="20" maxlength="20" />
+				<strong>Règles</strong> <input name='regles' type='text' value="<?php echo $art_regles;?>" size='20' maxlength='20' />
 <?php											if (!isset($numregles))	// ajout suite pb declaration
-												$numregles=""; // fin du if
+												$numregles=''; // fin du if
 ?>				<strong>N_regle (en_PJ)</strong> <input name="numregles" type="text" value="<?php echo $numregles;?>" size="6" maxlength="6" /><br/>
 
 <!--------DEBUT BLOC IMAGE------------------------------------------------------------------------------------------------>
-				<strong>Image actuelle : <img src="<?php echo $dossier.$art_image_IMG;?>" style="width:40px"><br/>
-				<strong>Modifier Image</strong>(format de type png, gif, jpg, jpeg...) :</br>
-				<input type="file" name="monfichier" id="image"/><br />
-				<input type="submit" name="verif" value="modifier" />
+<?php				$image=$dossier.$art_image_IMG;
+	echo		"<strong>Image actuelle : <img src='".$dossier.$art_image_IMG."' width='60'/><br/>";
+	// http://localhost/justeunsite/ludotest/ludoHtml/images/
+?>				<strong>Modifier Image</strong>(format de type png, gif, jpg, jpeg...) :</br>
+				<input type='file' name='nomfichier' id='image'/><br/>
+				<input type='submit' name='verif' value='modifier' />
 			</form>
 		</fieldset>
 <!------FIN BLOC ENREGISTRER---------------------------------------------------------------------------------------------->
