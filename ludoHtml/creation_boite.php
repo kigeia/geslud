@@ -35,7 +35,7 @@
 				<li>4. clic sur déplacer,</li>
 				<li>5. constater résultat.</li>
 			</ul></br>
-</div>
+		</div>
 
 <!------------DEBUT DU TEXTE DROITE------------------------------------------------>
 		<div class='paragraphe'><h6>Objectif de la page</h6>
@@ -63,8 +63,8 @@
 									} // fin if (isset($_POST['checky'])
 								} // fin if(isset($_POST['second'])
 //table qui contient les formulaires de recherche et de sélection
-echo '<table>	
-		<tr><td style="height:80px">';
+echo "<table>	
+		<tr><td style='height:80px'>";
 								if(isset($_POST['oui']))
 								{	if(isset($_POST['numer']))
 									{	$numer=$_POST['numer'];
@@ -81,7 +81,7 @@ echo '<table>
 										$art_LIB=$_POST['nom'];
 										$art_LIB0=$art_LIB.'_B1';
 										$req03="INSERT INTO te_boite2_bte (bte_LIB,bte_num,bte_LIB0,bte_crea_DAA,bte_crea_UAA)"
-										."VALUES('$art_LIB','1','$art_LIB0','$exp_crea_DAA',''$utilisateur_ID')";
+										."VALUES('$art_LIB','1','$art_LIB0','$exp_crea_DAA','$utilisateur_ID')";
 										mysql_query($req03);
 		echo 'La boite '.$art_LIB."_B1 vient d'être créée";
 									} // fin else (isset($_POST['numer']))
@@ -89,7 +89,10 @@ echo '<table>
 								else if(isset($_POST['ok']))
 								{	$nom=$_POST['nom'];
 									$art_LIB0=$nom.'_B1';
-									mysql_query("INSERT INTO te_boite2_bte VALUES('','$nom','1','$art_LIB0','','','','','','','','$date','','$heure')");
+									$exp_crea_DAA = date("Y-m-d H:i:s");
+									$req04="INSERT INTO te_boite2_bte (bte_LIB,bte_num,bte_LIB0,bte_crea_DAA,bte_crea_UAA)"
+										."VALUES('$nom','1','$art_LIB0','$exp_crea_DAA','$utilisateur_ID')";
+									mysql_query($req04);
 		echo 'La boite '.$nom.'_B1 vient d\'être créée';
 								}
 								else if(isset($_POST['non']))
@@ -102,9 +105,11 @@ echo '<table>
 <?php							} // fin else
 								else
 								{	if(isset($_POST['creation']))
-									{	$derart=mysql_query("SELECT art_LIB FROM te_article_art ORDER BY art_ID DESC LIMIT 0,1");
+									{	$req05="SELECT art_LIB FROM te_article_art ORDER BY art_ID DESC LIMIT 0,1";
+										$derart=mysql_query($req05);
 										while(list($art_LIB)=mysql_fetch_array($derart))
-										{	$verif_bte=mysql_query("SELECT COUNT(*) AS nbre FROM te_boite2_bte WHERE bte_LIB='$art_LIB'");
+										{	$req06="SELECT COUNT(*) AS nbre FROM te_boite2_bte WHERE bte_LIB='$art_LIB'";
+											$verif_bte=mysql_query($req06);
 											$verif_bte_res=mysql_fetch_array($verif_bte);
 											if($verif_bte_res['nbre']==0)
 											{
@@ -149,7 +154,8 @@ echo '<table>
 				</table>
 <!--DEBUT corps tableau colonne gauche-------------------------------------------------->
 <?php							$i=0;
-								$affich=mysql_query("SELECT exp_ID,exp_LIB1 FROM te_exemplaire2_exp ORDER BY exp_LIB1");
+								$req07="SELECT exp_ID,exp_LIB1 FROM te_exemplaire2_exp ORDER BY exp_LIB1";
+								$affich=mysql_query($req07);
 								while(list($exp_ID,$exp_LIB1)=mysql_fetch_array($affich))
 								{
 	echo		'<table id="'.$i.'">
@@ -172,7 +178,8 @@ echo '<table>
 				Boite n°
 				<select name="boite">
 					<option value="" selected="selected">Aucun</option>
-<?php							$liste1=mysql_query("SELECT bte_ID,bte_LIB1 FROM te_boite2_bte WHERE bte_LIB1<>'' ORDER BY bte_LIB1");
+<?php							$req08="SELECT bte_ID,bte_LIB1 FROM te_boite2_bte WHERE bte_LIB1<>'' ORDER BY bte_LIB1";
+								$liste1=mysql_query($req08);
 								while(list($bte_ID,$bte_LIB1)=mysql_fetch_array($liste1))
 								{
 ?>					<option value="<?php echo $bte_ID;?>"><?php echo $bte_LIB1;?></option>
@@ -184,18 +191,20 @@ echo '<table>
 								{$boite='';
 								echo "<p><b>Liste des exemplaires <span style='color:green'>sans boite</span></b><p/><hr/><br/>";
 								}
-								$boit=mysql_query("SELECT bte_LIB1 FROM te_boite2_bte WHERE bte_ID='$boite'ORDER BY bte_LIB1");
+								$req09="SELECT bte_LIB1 FROM te_boite2_bte WHERE bte_ID='$boite'ORDER BY bte_LIB1";
+								$boit=mysql_query($req09);
 								while(list($bte_LIB1)=mysql_fetch_array($boit))
 								{
 				echo "<b>Boite <span style='color:green'>".$bte_LIB1.'</span></b><br/>
 				<hr/><br/><br/>';
 								} // fin while
 // <!--DEBUT colonne 2 - corps du tableau -------------------------------------------------->
-								$select2=mysql_query("SELECT exp_LIB1 FROM te_exemplaire2_exp WHERE bte_ID='$boite' ORDER BY exp_LIB1");
+								$req10="SELECT exp_LIB1 FROM te_exemplaire2_exp WHERE bte_ID='$boite' ORDER BY exp_LIB1";
+								$select2=mysql_query($req10);
 								while(list($exp_LIB1)=mysql_fetch_array($select2))
 								{
-?>				<span style="color:blue"><?php echo $exp_LIB1;?></span><br/>
-<?php							} // fin while
+	echo			"<span style='color:blue'>".$exp_LIB1.'</span><br/>';
+								} // fin while
 								mysql_close();
 ?>			</td>
 		</tr>

@@ -94,7 +94,8 @@
 <?php									if ($_SESSION['usr_droit9']==1) {	?>
 			<div class='question gauche'><!--6-->6. Exemplaires du carton n°
 					<select name="carton">
-<?php									$demand=mysql_query("SELECT crt_LIB FROM te_carton_crt");
+<?php									$req01="SELECT crt_LIB FROM te_carton_crt";
+										$demand=mysql_query($req01);
 										while(list($crt_LIB)=mysql_fetch_array($demand))
 										{
 ?>						<option value="<?php echo $crt_LIB;?>"><?php echo $crt_LIB;?></option>
@@ -108,7 +109,8 @@
 			<div class='question gauche'><!--7-->7. Exemplaires de la boîte n°
 					<select name="boite">
 						<option value='Himalaya_B1'>Himalaya_B1</option>
-<?php									$demand1=mysql_query("SELECT bte_LIB1 FROM te_boite2_bte WHERE bte_LIB1<>''");
+<?php									$req02="SELECT bte_LIB1 FROM te_boite2_bte WHERE bte_LIB1<>''";
+										$demand1=mysql_query($req02);
 										while(list($bte_LIB1)=mysql_fetch_array($demand1))
 										{
 ?>						<option value="<?php echo $bte_LIB1;?>"><?php echo $bte_LIB1;?></option>
@@ -122,7 +124,8 @@
 			<div class='question gauche'><!--8-->8. Lieu des exemplaires liés au jeu de base
 				<select name="article">
 					<option value='Dune'>Dune</option>
-<?php									$demand2=mysql_query("SELECT art_LIB FROM te_article_art WHERE art_LIB<>''");
+<?php									$req03="SELECT art_LIB FROM te_article_art WHERE art_LIB<>''";
+										$demand2=mysql_query($req03);
 										while(list($art_LIB)=mysql_fetch_array($demand2))
 										{
 ?>					<option value="<?php echo $art_LIB;?>"><?php echo $art_LIB;?></option>
@@ -136,7 +139,8 @@
 			<div class='question gauche'><!--9-->9. Exemplaires liés à l'article
 				<select name="exemp">
 					<option value='Pit'>Pit</option>
-<?php									$demand3=mysql_query("SELECT art_LIB FROM te_article_art WHERE art_LIB<>''");
+<?php									$req04="SELECT art_LIB FROM te_article_art WHERE art_LIB<>''";
+										$demand3=mysql_query($req04);
 										while(list($art_LIB)=mysql_fetch_array($demand3))
 										{
 ?>					<option value="<?php echo $art_LIB;?>"><?php echo $art_LIB;?></option>
@@ -181,7 +185,8 @@
 <?php									if ($_SESSION['usr_droit9']==1) {	?>
 			<div class='question gauche'><!--16-->16. Boîtes hors de 
 				<select name="lieu">
-<?php								$demandlieu=mysql_query("SELECT lie_ID,lie_LIB FROM tx_lieu_lie");
+<?php								$req05="SELECT lie_ID,lie_LIB FROM tx_lieu_lie";
+									$demandlieu=mysql_query($req05);
 									while(list($lie_ID,$lie_LIB)=mysql_fetch_array($demandlieu))
 									{
 ?>					<option value="<?php echo $lie_ID;?>"><?php echo $lie_LIB;?></option>
@@ -211,7 +216,8 @@
 <?php									if ($_SESSION['usr_droit1']==1) {	?>
 			<div class='question gauche'><!--20-->*20. Différences d'inventaire entre Lieu 1
 				<select name="lieu1">
-<?php									$demandlieu1=mysql_query("SELECT lie_ID,lie_LIB FROM tx_lieu_lie");
+<?php									$req06="SELECT lie_ID,lie_LIB FROM tx_lieu_lie";
+										$demandlieu1=mysql_query($req06);
 										while(list($lie_ID,$lie_LIB)=mysql_fetch_array($demandlieu1))
 										{
 ?>					<option value="<?php echo $lie_ID;?>"><?php echo $lie_LIB;?></option>
@@ -219,7 +225,8 @@
 ?>				</select>
 				&nbsp;&nbsp; et Lieu 2 
 				<select name="lieu2">
-<?php									$demandlieu2=mysql_query("SELECT lie_ID,lie_LIB FROM tx_lieu_lie");
+<?php									$req07="SELECT lie_ID,lie_LIB FROM tx_lieu_lie";
+										$demandlieu2=mysql_query($req07);
 										while(list($lie_ID,$lie_LIB)=mysql_fetch_array($demandlieu2))
 										{
 ?>					<option value="<?php echo $lie_ID;?>"><?php echo $lie_LIB;?></option>

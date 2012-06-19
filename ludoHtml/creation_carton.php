@@ -1,6 +1,6 @@
 <?php					session_start();
 						if (!isset($_SESSION['connexion']))
-/* ajout du 01/06/2012*/ {	echo "vous n'etes pas (ou plus) connecté : veuillez passer par la page d'accueil <a href='../index.php'> ici </a>"; }
+						{	echo "vous n'etes pas (ou plus) connecté : veuillez passer par la page d'accueil <a href='../index.php'> ici </a>"; }
 						else
 						{	if ($_SESSION['usr_droit4']!=1)
 							{	echo "vous n'avez pas les privilèges pour cette page : veuillez passer par la page d'accueil <a href='../index.php'> ici </a>"; }
@@ -9,10 +9,10 @@
 									$_SESSION['page'] = 'creation_carton';	// mise en cache du num de page pour onglet coloré
 									$utilisateur_ID=$_SESSION['utilisateur_ID'];
 									include_once("include/connexion1.php");
+										mysql_query("SET NAMES 'utf8'");
 									include_once("include/htmlhead.inc.php");
+										headhtml("creation_carton","creation_carton");
 									include_once("include/fonctions.inc.php");
-									mysql_query("SET NAMES 'utf8'");
-									headhtml("creation_carton","creation_carton");
 									include("include/menu.inc.php");
 ?>	<body class="bodystyle">
 <!-- TITRE DU DOCUMENT -->
@@ -79,9 +79,10 @@
 									$carton1=''.$categsor.$carton1;
 									$carton2='';
 									$carton3=$carton1;
+									$crt_crea_DAA=date("Y-m-d H:i:s");
 									$cartonAffichage=$carton1;
-/**/										$req01="INSERT INTO te_carton_crt (crt_LIB   ,sor_GUID,   crt_DAA,           crt_UAA)"
-																	."VALUES('$carton1','$categsor',CURRENT_TIMESTAMP,'$utilisateur_ID')";
+/**/										$req01="INSERT INTO te_carton_crt (crt_LIB,sor_GUID,crt_DAA,crt_UAA)"
+																."VALUES('$carton1','$categsor','$crt_crea_DAA','$utilisateur_ID')";
 											$res01=mysql_query($req01);
 									}
 								} // fin isset premier
@@ -93,8 +94,9 @@
 									$carton3=$_POST['carton2'];
 									$cartonAffichage=$carton2;
 									if (isset($_POST['checky']) && !empty($_POST['checky'])) 
-									{	foreach ($_POST['checky'] as $checky)
-										{	$req02="UPDATE te_boite2_bte SET crt_LIB='$carton2',bte_mvt_DAA=CURRENT_TIMESTAMP,bte_mvt_UAA='$utilisateur_ID' WHERE bte_ID='$checky'";
+									{	$bte_mvt_DAA=date("Y-m-d H:i:s");
+										foreach ($_POST['checky'] as $checky)
+										{	$req02="UPDATE te_boite2_bte SET crt_LIB='$carton2',bte_mvt_DAA='$bte_mvt_DAA',bte_mvt_UAA='$utilisateur_ID' WHERE bte_ID='$checky'";
 											$res02=mysql_query($req02);
 										}
 									}
@@ -167,7 +169,7 @@ echo '<table>
 												{
 	echo				 "<table id='".$i."'>";
 ?>							<tr>
-								<td width="20">
+			<td width="20">
 				<input type="checkbox" name="checky[]" value="<?php echo $bte_ID;?>" onclick="color=this.checked?'#DEFBC5':'';document.getElementById('<?php echo $i;?>').style.backgroundColor=color;">
 								</td>
 								<td class='cellule10'><?php echo$bte_LIB1; ?></td>
@@ -206,7 +208,7 @@ echo '<table>
 <!----------colonne droite -  bouton déplacer les boites------------------------------------------------------->
 							<input type="submit" name="second" value="Déplacer les boites vers le"/>&nbsp;&nbsp;
 
-<?php //----------colonne droite - affichage du lieu en VERT------------------------------------------------------------------
+<?php //----colonne droite - affichage du lieu en VERT------------------------------------------------------------------
 /**/										
 	echo					'<span style="color:green;font-weight:bold">Carton '.$cartonAffichage.'</span>';
 	echo					"<input type='hidden' name='carton2' value='".$carton3."'/>";
@@ -225,7 +227,7 @@ echo '<table>
 <?php						}
 ?>					</td>
 				</tr>
-			</table>
+			</table><!-- fin colonne droite -------------------------------------------------------->
 		</td>
 	</table>
 

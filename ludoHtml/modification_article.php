@@ -24,14 +24,13 @@
 										$utilisateur_ID=$_SESSION['utilisateur_ID'];
 										$dossier ='images/';
 										include_once("include/connexion1.php");
-										mysql_query("SET NAMES 'utf8'");
+											mysql_query("SET NAMES 'utf8'");
 										include_once("include/fonctions.inc.php");
 										include_once("include/htmlhead.inc.php");
 											headhtml("modif_article","maj");
+										include ("include/menu.inc.php");
 ?><body>
 <div class="bodystyle"><br/>
-<?php									include "include/menu.inc.php";
-?>
 <!-- TITRE DU DOCUMENT -------------------------------------------------------------------------------->
 		<div class='titre'>
 			<h5>Mise à jour -

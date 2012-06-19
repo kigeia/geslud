@@ -41,9 +41,10 @@
 										{
 /**/	echo "<h3>X. Recherche rapide des caractéristiques et du lieu où se trouve<br/>&nbsp;&nbsp;&nbsp; le jeu contenant le mot <span style='color:red'>".fsecure($_POST['jeu'])."</span> : </h3>";
 											//recherche d'un jeu
-											$req00="SELECT art_LIB,art_ID,jtp_ID,art_nbJoueursMini_DN,jmx_ID,dur_ID,thm_ID,art_image_IMG FROM te_article_art WHERE (art_materielType_DA='jeu') AND art_LIB like '%".fsecure($_POST['jeu'])."%' ORDER BY art_LIB";
+											$req00="SELECT art_LIB,art_ID,jtp_ID,art_nbjoueurmin,jmx_ID,dur_ID,thm_ID,art_image_IMG "
+												."FROM te_article_art WHERE (art_materieltype='jeu') AND art_LIB like '%".fsecure($_POST['jeu'])."%' ORDER BY art_LIB";
 											$res00=mysql_query($req00);
-											while(list($art_LIB,$art_ID,$jtp_ID,$art_nbJoueursMini_DN,$jmx_ID,$dur_ID,$thm_ID,$art_image_IMG)=mysql_fetch_array($res00))
+											while(list($art_LIB,$art_ID,$jtp_ID,$art_nbjoueurmin,$jmx_ID,$dur_ID,$thm_ID,$art_image_IMG)=mysql_fetch_array($res00))
 											{	$req02="SELECT jtp_LIB FROM tx_jeutype_jtp WHERE jtp_ID='$jtp_ID'";
 												$res02=mysql_query($req02);
 												$jtp_LIB=mysql_fetch_row($res02);
@@ -56,7 +57,7 @@
 					<td class='td6'><h3 style='color:blue'>".$art_LIB."</h3></td>
 					<td> <img src='images/".$art_image_IMG."' width='80'/></td>"
 					."<td class='td6'>".$jtp_LIB[0]."<br/>"
-							."de ".$art_nbJoueursMini_DN." à ".$jmx_ID." joueurs<br/>"
+							."de ".$art_nbjoueurmin." à ".$jmx_ID." joueurs<br/>"
 							."durée ".$dur_ID." min env.<br/>"
 							."thème ".$thm_LIB[0]
 					."</td></tr>
@@ -90,14 +91,14 @@
 												//
 	echo				'<h4>La base de donnée est composée de :</h4>';
 											// nb d'articles
-											$req="SELECT art_id FROM te_article_art";
-											$res=mysql_query($req);
-											$nbarticle=mysql_num_rows($res);
+											$req04="SELECT art_id FROM te_article_art";
+											$res04=mysql_query($req04);
+											$nbarticle=mysql_num_rows($res04);
 	echo				'- '.$nbarticle.' articles (dont ';
 											// nb d'articles qui ne sont pas des jeux
-											$req2="SELECT art_id FROM te_article_art WHERE art_materieltype<>'jeu'";
-											$res2=mysql_query($req2);
-											$nbdivers=mysql_num_rows($res2);
+											$req05="SELECT art_id FROM te_article_art WHERE art_materieltype<>'jeu'";
+											$res05=mysql_query($req05);
+											$nbdivers=mysql_num_rows($res05);
 	echo				$nbdivers.' qui ne sont pas des jeux),<br/>';
 											// nb d'exemplaires
 											$req3="SELECT exp_id FROM te_exemplaire2_exp";
@@ -115,9 +116,9 @@
 											$nbboite=mysql_num_rows($res5);
 	echo				'- '.$nbboite.' boites (dont ';
 											// nb de boites vides
-											$req5="SELECT bte_LIB1 FROM te_boite2_bte WHERE bte_LIB<>'NULL' AND te_boite2_bte.bte_ID NOT IN ( SELECT DISTINCT bte_ID FROM te_exemplaire2_exp where bte_ID<>'NULL')";
-											$res5=mysql_query($req5);
-											$nbboitevide=mysql_num_rows($res5);
+											$req20="SELECT bte_LIB1 FROM te_boite2_bte WHERE bte_LIB<>'NULL' AND te_boite2_bte.bte_ID NOT IN ( SELECT DISTINCT bte_ID FROM te_exemplaire2_exp where bte_ID<>'NULL')";
+											$res20=mysql_query($req20);
+											$nbboitevide=mysql_num_rows($res20);
 	echo				$nbboitevide.' boites vides),<br/>';
 											// nb de cartons
 											$req06="SELECT crt_LIB FROM te_carton_crt";
@@ -166,12 +167,13 @@
 	echo '<h3>2. Exemplaires sans boîte</h3>';
 											//exemplaires sans boite
 											// $sql = "SELECT exp_LIB FROM te_exemplaire2_exp WHERE (bte_ID IS NULL OR bte_ID=0)";
-											$req=mysql_query("SELECT exp_LIB1 FROM te_exemplaire2_exp WHERE (bte_ID IS NULL OR bte_ID=0) ORDER BY exp_LIB1");
+											$req11="SELECT exp_LIB1 FROM te_exemplaire2_exp WHERE (bte_ID IS NULL OR bte_ID=0) ORDER BY exp_LIB1";
+											$res11=mysql_query($req11);
 											// $req=mysql_query("SELECT exp_LIB FROM te_exemplaire2_exp WHERE bte_ID='' OR bte_ID='0'");
-											while(list($exp_LIB1)=mysql_fetch_array($req))
+											while(list($exp_LIB1)=mysql_fetch_array($res11))
 											{	echo ''.$exp_LIB1.'<br/>';
 											} // fin while
-												if (mysql_num_rows($req)==0)
+												if (mysql_num_rows($res11)==0)
 												{ 
 echo						"<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Il n'y a pas de résultat valide pour votre demande.";
 												}
@@ -182,12 +184,13 @@ echo						"<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Il n'y a pas de r
 											//boites sans exemplaire
 /* erreur */								// $sql = "SELECT bte_LIB FROM te_boite2_bte WHERE (bte_ID NOT LIKE \'%_B%\' LIMIT 0, 30 ";
 											// $sql = "SELECT bte_LIB1, bte_ID FROM te_boite2_bte WHERE te_boite2_bte.bte_ID NOT IN ( SELECT DISTINCT bte_ID FROM te_exemplaire2_exp where bte_ID<>0)";
-											$req=mysql_query("SELECT bte_LIB1 FROM te_boite2_bte WHERE bte_LIB<>'NULL' AND te_boite2_bte.bte_ID NOT IN ( SELECT DISTINCT bte_ID FROM te_exemplaire2_exp where bte_ID<>'NULL')");
-											while(list($bte_LIB1)=mysql_fetch_array($req))
+											$req12="SELECT bte_LIB1 FROM te_boite2_bte WHERE bte_LIB<>'NULL' AND te_boite2_bte.bte_ID NOT IN ( SELECT DISTINCT bte_ID FROM te_exemplaire2_exp where bte_ID<>'NULL')";
+											$res12=mysql_query($req12);
+											while(list($bte_LIB1)=mysql_fetch_array($res12))
 											{	
 	echo	''.$bte_LIB1.'<br/>';
 											}// fin while
-												if (mysql_num_rows($req)==0)
+												if (mysql_num_rows($res12)==0)
 												{ 
 echo						"<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Il n'y a pas de résultat valide pour votre demande.";
 												}
@@ -197,12 +200,13 @@ echo						"<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Il n'y a pas de r
 	echo '<h3>4. Boîtes sans carton</h3>';
 											//----boites sans carton---------------
 											// $sql = "SELECT bte_LIB FROM `te_boite2_bte` WHERE `crt_LIB` = \"\"";
-											$req=mysql_query("SELECT bte_LIB1 FROM te_boite2_bte WHERE (crt_LIB = \"\" OR crt_LIB IS NULL OR crt_LIB='INCO') ORDER BY bte_LIB");
-											while(list($bte_LIB1)=mysql_fetch_array($req))
+											$req13="SELECT bte_LIB1 FROM te_boite2_bte WHERE (crt_LIB = \"\" OR crt_LIB IS NULL OR crt_LIB='INCO') ORDER BY bte_LIB";
+											$res13=mysql_query($req13);
+											while(list($bte_LIB1)=mysql_fetch_array($res13))
 											{	
 	echo			''.$bte_LIB1.'<br/>';
 											} // fin while
-												if (mysql_num_rows($req)==0)
+												if (mysql_num_rows($res13)==0)
 												{ 
 echo						"<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Il n'y a pas de résultat valide pour votre demande.";
 												}

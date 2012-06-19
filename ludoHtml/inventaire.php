@@ -115,18 +115,18 @@
 <div class='colonnegauche'>
 
 	<!-- debut choix type de mouvement gauche -------------------------------------------------->
-	<div class='audessusentetetableau'><br/>
+	<div class='audessusentetetableau'>
 				<input type='radio' name='radio' value='mvtcarton'/> Mouvement par carton :
-				<select name='carton'>
-					<option value='' selected='selected'>aucun</option>
+					<select name='carton'>
+						<option value='' selected='selected'>aucun</option>
 <?php											$req06="SELECT crt_LIB FROM te_carton_crt ORDER BY crt_LIB";
 												$liste1=mysql_query($req06);
 												while(list($crt_LIB)=mysql_fetch_array($liste1))
 												{
-?>					<option value="<?php echo $crt_LIB;?>"><?php echo $crt_LIB;?></option>
+?>						<option value="<?php echo $crt_LIB;?>"><?php echo $crt_LIB;?></option>
 <?php											}
-?>				</select><br/>
-				<input type="radio" name="radio" value='mvtboite' checked='checked'/> Mouvement par boite 
+?>					</select><br/>
+				<input type="radio" name="radio" value='mvtboite' checked='checked'/> Mouvement par boite
 				<input type="submit" name="premier" value="déplacer" onClick="if(!confirm('êtes-vous sûr ?'))return false;"/><br/>
 	</div> <!-- fin choix mvt par carton ou par boite du tableau de gauche -->
 

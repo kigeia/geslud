@@ -7,9 +7,9 @@
 							else
 							{	$_SESSION['page'] = 'inventaire';	// mise en cache du num de page pour onglet coloré
 								include_once("include/connexion1.php");
-								include_once("include/htmlhead.inc.php");
 								mysql_query("SET NAMES 'utf8'");
-								headhtml("historique_boite","maj");
+								include_once("include/htmlhead.inc.php");
+									headhtml("historique_boite","maj");
 ?>
 <body>
 <div class="bodystyle"><br/>
@@ -17,18 +17,19 @@
 <?php							include "include/menu.inc.php";
 								include "include/fonctions.inc.php";
 ?>
-<!-- TITRE DU DOCUMENT -->
+<!-- TITRE DU DOCUMENT ------------------------------------------------------------------------>
 <br/><div class='titre'><h5>Gestion Ludo - Historique du déplacement des boites</h5>
-</div><!-- FIN DU TITRE DU DOCUMENT -->
-	<!--DEBUT DU TEXTE DROITE------------------------------------------------>
+</div>
+
+<!--DEBUT DU TEXTE DROITE---------------------------------------------------------------------->
 	<div class='paragraphe'><h6>Objectif de la page</h6>
 		<h7>permettre au responsable du stock des jeux de :</h7>
 			<ul>
 				<li>voir les différentes modifications de lieu d'une boite de jeu.</li>
 			</ul></br></br>
-	</div><!-- ---------FIN DU TEXTE DROITE------------------------->
+	</div>
 
-<!--DEBUT DU CORPS DE LA PAGE-----------------------------------------------------------	-->	
+<!--DEBUT DU CORPS DE LA PAGE--------------------------------------------------------------->
 	<div class="zoneCorpsDoc">
 <?php							if (isset($_GET['idd']))
 								{	$idd=$_GET['idd'];}
@@ -40,14 +41,16 @@
 								}
 								else	{	$clef='';
 											$clef='';}
-								$num=mysql_query("SELECT COUNT(*) AS nbre FROM th_mouvement_mvt WHERE bte_ID='$idd'");
+								$req01="SELECT COUNT(*) AS nbre FROM th_mouvement_mvt WHERE bte_ID='$idd'";
+								$num=mysql_query($req01);
 								$num1=mysql_fetch_array($num);
 								if($num1['nbre']==0)
 								{	echo 'Aucun mouvement trouvé';
 								}
 								else
 								{	
-									$nom=mysql_query("SELECT bte_LIB1 FROM te_boite2_bte WHERE bte_ID='$idd'");
+									$req02="SELECT bte_LIB1 FROM te_boite2_bte WHERE bte_ID='$idd'";
+									$nom=mysql_query($req02);
 									while(list($bte_LIB1)=mysql_fetch_array($nom))
 									{
 ?>		<table width="150">
@@ -59,11 +62,14 @@
 			</tr>
 			<tr><td colspan=3><hr/></td>
 			</tr>
-<?php									$affich=mysql_query("SELECT * FROM th_mouvement_mvt WHERE bte_ID='$idd' ORDER BY mvt_ID DESC");
-										while(list($mvt_ID,$bte_ID,$lie_ID,$mvt_MOD,$mvt_TRI,$mvt_DAA,$mvt_TAA,$mvt_UAA)=mysql_fetch_array($affich))
+<?php									$req03="SELECT bte_ID,lie_ID,mvt_TRI,mvt_DAA,mvt_UAA "
+											."FROM th_mouvement_mvt WHERE bte_ID='$idd' ORDER BY mvt_ID DESC";
+										$affich=mysql_query($req03);
+										while(list($bte_ID,$lie_ID,$mvt_TRI,$mvt_DAA,$mvt_UAA)=mysql_fetch_array($affich))
 										{
 	echo	'<tr><td>';
-											$lieuEnClair=mysql_query("SELECT lie_LIB FROM tx_lieu_lie WHERE lie_ID='$lie_ID'");
+											$req04="SELECT lie_LIB FROM tx_lieu_lie WHERE lie_ID='$lie_ID'";
+											$lieuEnClair=mysql_query($req04);
 											while(list($lie_LIB)=mysql_fetch_array($lieuEnClair))
 											{	
 	echo			$lie_LIB;
@@ -71,9 +77,10 @@
 ?>				</td>
 				<td><?php echo $mvt_DAA;?></td>
 				<td>
-					<?php					$auteurEnClair=mysql_query("SELECT usr_LIB FROM te_utilisateur_usr WHERE usr_ID='$mvt_UAA'");
+<?php										$req05="SELECT usr_LIB FROM te_utilisateur_usr WHERE usr_ID='$mvt_UAA'";
+											$auteurEnClair=mysql_query($req04);
 											while(list($usr_LIB)=mysql_fetch_array($auteurEnClair))
-											{	
+											{
 	echo			$usr_LIB;
 											}
 ?>
@@ -89,6 +96,6 @@
 </body>
 </html>
 <?php
-/* ajout pbo 01/06/2012 */		} // fin if ($_SESSION['connexion'] != 4)
+							} // fin if ($_SESSION['connexion'] != 4)
 						} // fin test connexion
 ?>

@@ -16,9 +16,9 @@
 	echo "vous n'avez pas les privilèges pour cette page : veuillez passer par la page d'accueil <a href='../index.php'> ici </a>";
 								else
 								{	$_SESSION['page'] = 'creation_boite';	// mise en cache du num de page pour onglet coloré
-									$utilisateur_ID=$_SESSION['utilisateur_ID'];
+										$utilisateur_ID=$_SESSION['utilisateur_ID'];
 									include_once("include/connexion1.php");
-									mysql_query("SET NAMES 'utf8'");
+										mysql_query("SET NAMES 'utf8'");
 									include_once("include/htmlhead.inc.php");
 										headhtml("ajout_EX","creation_Exemplaire");
 ?><body class="bodystyle">
@@ -32,10 +32,12 @@
 
 									// $sql = "INSERT INTO `geslud`.`te_exemplaire2_exp` (`exp_ID`, `exp_LIB`, `exp_num`, `exp_LIB1`, `exp_RG`, `exp_TXT`, `exp_MOD`, `exp_TRI`, `art_ID`, `exp_acquisitionAnnee_DN`, `bte_ID`, `exp_provenance_DA`, `exp_proprietaire`, `exp_crea_DAA`, `exp_crea_UAA`)
 									// VALUES (NULL, \'Dune_5\', NULL, NULL, NULL, NULL, \'1\', \'exp\', NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, NULL);";
-									$sql= mysql_query("INSERT INTO te_exemplaire2_exp VALUES ('','$Design','$exemple','$exemplaire','9999','','1','exp','$article','2012','','','',CURRENT_TIMESTAMP,'$utilisateur_ID','','')");
-										mysql_query($sql);
-?>
-		<div class="zoneCorpsDoc">
+									$exp_annee = date("Y");
+									$exp_crea_DAA = date("Y-m-d H:i:s");
+									$req01="INSERT INTO te_exemplaire2_exp (exp_LIB,exp_num,exp_LIB1,art_ID,exp_annee,exp_crea_DAA,exp_crea_UAA)"
+										."VALUES ('$Design','$exemple','$exemplaire','$article','$exp_annee','$exp_crea_DAA','$utilisateur_ID')";
+									$res01= mysql_query($req01);
+?>		<div class="zoneCorpsDoc">
 <?php
 /*									if (mysql_insert_id() === 0) 
 									{	// printf("Dans la base le id est %d\n", mysql_insert_id(),"</br></br>");
