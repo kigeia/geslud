@@ -1,6 +1,7 @@
 <?php									session_start();
 										$_SESSION['page'] = 'index';	// mise en cache du num de page pour onglet coloré
-?>
+
+										?>
 	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 		"http://www.w3.org/TR/html4/loose.dtd">
 	<!-- Start cu3ox.com HEAD section -->

@@ -116,9 +116,9 @@
 									."VALUES('$design','$descript','1','art','$baseext','$public','$max','$theme','$jeutype','$conseil','$agemin','$duree','$bggid','$designvo','$nomfichier','$an','$editeur','$min','$regles','$numregles','jeu',CURRENT_TIMESTAMP(14),'$utilisateur_ID')";
 	//								."VALUES('','$design','','$descript','1','art','','$BaseEx','','','','','','','','$bggid','$designvo','$nomfichier','$an','$editeur','$min','$regles','$reglesPJ','jeu','',CURRENT_TIMESTAMP,'$heure','$utilisateur_ID','','','','','','')";
 							$res01=mysql_query($req01); // creation d'un nouvel article
-						$req04="SELECT art_ID FROM te_article_art WHERE art_LIB='$design'";
-						$calq=mysql_query($req04);
-						while(list($art_ID)=mysql_fetch_array($calq))
+							$req04="SELECT art_ID FROM te_article_art WHERE art_LIB='$design'";
+							$res04=mysql_query($req04);
+						while(list($art_ID)=mysql_fetch_array($res04))
 						{	$Design0=$design.'_E1';
 							$exp_crea_DAA = date("Y-m-d-H:i:s");
 							$annee = date("Y");
@@ -204,7 +204,8 @@
 								}
 								$Des=trim($design); // suppression des espaces avant et après
 								if($Des!='' AND !isset($_POST['nomfichier']))
-								{	$result=mysql_query("SELECT * FROM te_article_art WHERE art_LIB LIKE '%$design%'") or die(mysql_error()); 
+								{	$req15="SELECT * FROM te_article_art WHERE art_LIB LIKE '%$design%'";
+									$result=mysql_query($req15) or die(mysql_error()); 
 									if(mysql_numrows($result)==0) //Récupère le nombre de lignes d'un jeu de résultat
 									{	echo "Aucun article ne correspond à la recherche <b>".$design."</b><br/><br/>";
 ?>		<fieldset>
@@ -219,9 +220,9 @@
 <!----------DEBUT BLOC BASE OU EXTENSION----------------------------------------------------------------------------------->
 				<strong>Base ou Extension</strong> 
 				<select name="baseext"  id="baseext">				
-<?php											$req08="SELECT * FROM tx_jeuextbase_ext ORDER BY ext_RG ASC";
-												$demand_ext = mysql_query($req08);
-												while(list($ext_ID,$ext_LIB)=mysql_fetch_array($demand_ext))
+<?php											$req08="SELECT ext_ID,ext_LIB FROM tx_jeuextbase_ext ORDER BY ext_RG ASC";
+												$res08 = mysql_query($req08);
+												while(list($ext_ID,$ext_LIB)=mysql_fetch_array($res08))
 												{	if(isset($_POST['baseext']) AND $ext_ID==$_POST['baseext'])
 													{
 	echo'			<option value="'.$_POST['baseext'].'" selected="selected">'.$ext_LIB.'</option>';
@@ -240,9 +241,9 @@
 <!----------DEBUT BLOC CONSEIL--------------------------------------------------------------------------------------------->
 		<strong>Conseil</strong> 
 				<select name='conseil'>				
-<?php											$req08="SELECT * FROM tx_jeuconseil_csl ORDER BY csl_RG ASC";
-												$res08 = mysql_query($req08);
-												while(list($csl_ID,$csl_LIB)=mysql_fetch_array($res08))
+<?php											$req16="SELECT * FROM tx_jeuconseil_csl ORDER BY csl_RG ASC";
+												$res16 = mysql_query($req16);
+												while(list($csl_ID,$csl_LIB)=mysql_fetch_array($res16))
 												{	if($csl_ID==$conseil)
 													{
 	echo'			<option value="'.$csl_ID.'" selected="selected">'.$csl_LIB.'</option>';
@@ -256,7 +257,8 @@
 <!-------SELECTION DU Thème ---------------------------------------------------------------------------------------------------->
 				<strong>Thème </strong>
 				<select name="theme">';
-<?php											$sql = mysql_query("SELECT * FROM tx_jeutheme_thm ORDER BY thm_ID DESC");
+<?php											$req17="SELECT thm_ID,thm_LIB FROM tx_jeutheme_thm ORDER BY thm_ID DESC";
+												$sql = mysql_query($req17);
 												while(list($thm_ID,$thm_LIB)=mysql_fetch_array($sql))
 												{	if($thm_ID==$theme)
 													{
@@ -272,7 +274,7 @@
 <!--------------SELECTION DU TYPE DE JEU ------------------------------------------------------------------------------------->
 			<br/><strong>Type de Jeu</strong> 
 				<select name="jeutype">
-<?php											$req05="SELECT * FROM tx_jeutype_jtp ORDER BY jtp_RG ASC";
+<?php											$req05="SELECT jtp_ID,jtp_LIB FROM tx_jeutype_jtp ORDER BY jtp_RG ASC";
 												$res05 = mysql_query($req05);
 												while(list($jtp_ID,$jtp_LIB)=mysql_fetch_array($res05))
 												{	if($jtp_ID==$jeutype)
@@ -289,7 +291,7 @@
 <!--------------SELECTION DU TYPE DE PUBLIC ------------------------------------------------------------------------------------->
 			<strong>Public</strong> 
 				<select name="public">
-<?php											$req06="SELECT * FROM tx_public_pbl ORDER BY pbl_RG ASC";
+<?php											$req06="SELECT pbl_ID,pbl_LIB FROM tx_public_pbl ORDER BY pbl_RG ASC";
 												$res06 = mysql_query($req06);
 							while(list($pbl_ID,$pbl_LIB)=mysql_fetch_array($res06))
 							{	if($pbl_ID==$public)
@@ -310,9 +312,9 @@
 <!--------------début BLOC Age mini---------------------------------------------------------------------------------------------->
 				<br/><strong>Age_min</strong>
 				<select name="agemin">
-<?php												
-												$sql = mysql_query("SELECT gmi_ID,gmi_LIB,gmi_TXT FROM tx_joueuragemin_gmi ORDER BY gmi_RG ASC");
-												while(list($gmi_ID,$gmi_LIB,$gmi_TXT)=mysql_fetch_array($sql))
+<?php											$req18="SELECT gmi_ID,gmi_LIB,gmi_TXT FROM tx_joueuragemin_gmi ORDER BY gmi_RG ASC";
+												$res18 = mysql_query($req18);
+												while(list($gmi_ID,$gmi_LIB,$gmi_TXT)=mysql_fetch_array($res18))
 												{	if($gmi_ID==$agemin)
 													{
 	echo			'<option value="'.$gmi_ID.'" selected="selected">'.$gmi_LIB.'</option>';
@@ -328,7 +330,8 @@
 <!-------début BLOC Durée--------------------------------------------------------------------------------------------------------------------->
 				<strong>Durée (en min):</strong> 
 				<select name="duree">
-<?php											$sql = mysql_query("SELECT dur_ID,dur_LIB FROM tx_jeuduree_dur ORDER BY dur_RG ASC");
+<?php											$req19="SELECT dur_ID,dur_LIB FROM tx_jeuduree_dur ORDER BY dur_RG ASC";
+												$sql = mysql_query($req19);
 												while(list($dur_ID,$dur_LIB)=mysql_fetch_array($sql))
 												{	if($dur_ID==$duree)
 													{
@@ -359,33 +362,37 @@
 				<input type="submit" name="verif" value="Vérification de l'article avant ajout" />
 			</form>
 		</fieldset><!------------FIN BLOC ENREGISTRER--	-->
-<?php								} // fin
+<?php								} // fin if auncun n'rticle ne correspond à la demande
 									else
 									{	while ($row = mysql_fetch_row($result))
 										{	if(!isset($_POST['envoi']))
-											{	echo"[".$design."] existe dans la chaine de caractères de  ".$row[1].".</br>";
+											{	echo"[".$design."] existe dans la chaine de caractères de l'article <span style='color:blue'>".$row[1].".</span></br>";
 												$ch1="$design";
 												$ch2="$row[1]";
 												$resultb = preg_match("/^.*$ch1.*$/", "/^.*$ch2.*$/"); // on teste si la valeur de result 0 ou 1 (correcte)
 												//echo " = ".$resultb." ";
 												if ($resultb == 1)
 												{
-echo		 "---> <u>".$ch1. "</u> existe déjà.<br/>";?>
+echo		 "---> <u>".$ch2. "</u> existe déjà.<br/>";?>
 
 <!------BLOC formulaire CREATION DE L'EXEMPLAIRE ------------------------------------------------------------>
 			<form action="creation_Exemplaire.php" method="post" >
-				<input type="hidden" name="design" value="<?php echo($design);?>" />	
-				<input type="submit" value="Créer un exemplaire" />
-			</form> OU 
+				<input type="hidden" name="design" value="<?php echo($ch2);?>" />
+<?php	echo	"<input type='submit' value='Créer un nouvel exemplaire de ".$ch2."' />";
+?>			</form> OU 
 			<form action="maj.php" method="post" >
 				<input type="submit" value="Retourner au menu création article" />
 			</form><br/><br/>
-<?php												}
+<?php											} // fin if ($resultb == 1) libellé exact
 												else 
 												{
 	echo		$ch1." & ".$ch2 ." se ressemblent, mais ne sont pas identiques.";
-												}
-											}
+?>					<form action="creation_Exemplaire.php" method="post" >
+<?php	echo			"<input type='hidden' name='design' value='".$ch2."' />";
+		echo			"<input type='submit' value='Créer un exemplaire de '".$ch2."' />";
+		echo		"</form> OU ";
+												} // fin else ($resultb == 1)
+											} // fin if(!isset($_POST['envoi']))
 											else 
 											{
 ?>			<form action="creation_Exemplaire.php" method="post" >
@@ -395,9 +402,9 @@ echo		 "---> <u>".$ch1. "</u> existe déjà.<br/>";?>
 			<form action="maj.php" method="post" >
 				<input type="submit" value="Retourner au menu création article" />
 			</form><br/><br/>
-<?php										}
-										} // fin while
-									} // fin else
+<?php										} // fin else(!isset($_POST['envoi']))
+										} // fin while ($row = mysql_fetch_row($result))
+									} // fin else il y a au moins un article qui correspond à la recherche
 								}
 ?>			</td>
 
